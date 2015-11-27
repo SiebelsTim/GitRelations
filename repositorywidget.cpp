@@ -5,6 +5,8 @@
 #include "CommitIterator.h"
 #include "Signature.h"
 
+#include "paintwindow.h"
+
 #include <QListWidget>
 
 RepositoryWidget::RepositoryWidget(const Repository* repo, QWidget *parent) :
@@ -40,4 +42,6 @@ void RepositoryWidget::loadFacts() {
 
 void RepositoryWidget::on_pushButton_clicked()
 {
+  auto paint = new PaintWindow(this);
+  paint->show();
 }
