@@ -27,7 +27,7 @@ FORMS    += mainwindow.ui \
     repositorywidget.ui \
     paintwindow.ui
 
-unix:!macx: LIBS += -L$$PWD -lgitcpp
+unix:!macx: LIBS += -L$$PWD -lgitcpp -lgit2
 
 INCLUDEPATH += $$PWD/../libgitcpp/include
 DEPENDPATH += $$PWD/../libgitcpp/include
