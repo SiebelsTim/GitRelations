@@ -1,0 +1,11 @@
+*~
+*.pro.user
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+moc_*
+ui_*.h
+
+libGitRelationsLib.so
+git_relations
