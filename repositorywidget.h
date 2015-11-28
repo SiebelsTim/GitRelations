@@ -15,6 +15,8 @@ class RepositoryWidget : public QMainWindow
 
 public:
   explicit RepositoryWidget(const Repository* repo, QWidget *parent = 0);
+  RepositoryWidget(const RepositoryWidget&) = delete;
+  RepositoryWidget(const RepositoryWidget&&) = delete;
   ~RepositoryWidget();
   void loadFacts();
 
