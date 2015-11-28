@@ -2,28 +2,59 @@
 #include "ui_paintwindow.h"
 #include "node.h"
 
-#include <QGraphicsItem>
+#include "CommitIterator.h"
+#include "Commit.h"
+#include "Repository.h"
+#include "Diff.h"
 
-PaintWindow::PaintWindow(QWidget *parent) :
+#include <QGraphicsItem>
+#include <QDebug>
+
+PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   QMainWindow(parent),
-  ui(new Ui::PaintWindow)
+  ui(new Ui::PaintWindow),
+  m_repo(repo)
 {
   ui->setupUi(this);
-  QGraphicsScene* scene = new QGraphicsScene(this);
+  m_scene = new QGraphicsScene(this);
+  ui->graphicsView->setScene(m_scene);
 
-  Node* node = new Node;
-  scene->addItem(node);
+  auto root = new Node(m_scene, "/");
 
-  Node* node2 = new Node;
-  scene->addItem(node2);
+  std::map<std::string, Node*> folders;
+  std::map<std::string, Node*> files;
 
-  Node* node3 = new Node;
-  scene->addItem(node3);
-  auto line = scene->addLine(100, 0, 100, 100);
-  auto line2 = scene->addLine(100, 0, 100, 100);
-  node->addAdjacentNode(node2, line);
-  node->addAdjacentNode(node3, line2);
-  ui->graphicsView->setScene(scene);
+  for (const auto& commit : m_repo->iter()) {
+    std::set<std::string> affectedfiles = commit.getAffectedFiles();
+    for (const std::string& file : affectedfiles) {
+      std::string rootpath;
+      std::string filename;
+      splitFile(file, &rootpath, &filename);
+
+      if (files.find(file) != files.end()) { // found
+        break;
+      }
+
+      auto node = new Node(m_scene, filename);
+      files[file] = node;
+      if (rootpath == "/") {
+        root->addAdjacentNode(node);
+      } else {
+        // TODO: add subfolders
+      }
+    }
+  }
+}
+
+inline void PaintWindow::splitFile(const std::string& file, std::string* root, std::string* filename) {
+  size_t last_slash = file.find_last_of('/');
+  if (last_slash == std::string::npos) {
+    *filename = file;
+    *root = "/";
+  } else {
+    *filename = file.substr(last_slash);
+    *root = file.substr(0, last_slash);
+  }
 }
 
 PaintWindow::~PaintWindow()

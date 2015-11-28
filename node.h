@@ -2,19 +2,28 @@
 #define NODE_H
 
 #include <QGraphicsEllipseItem>
+#include <QGraphicsTextItem>
+#include <QGraphicsScene>
 
 class Node : public QGraphicsEllipseItem
 {
 public:
-  explicit Node(const QRectF& rect) : QGraphicsEllipseItem(rect) {
+  explicit Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect = QRectF(0, 0, 100, 100))
+    : QGraphicsEllipseItem(rect),
+      m_scene(scene) {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
+
+    m_text = new QGraphicsTextItem(this);
+    m_text->setPlainText(content.c_str());
+    m_text->setPos(rect.topLeft());
+    m_scene->addItem(m_text);
+    m_scene->addItem(this);
   }
 
-  explicit Node(): Node(QRectF(0, 0, 30, 30)) {
-  }
 
-  void addAdjacentNode(Node* node, QGraphicsLineItem* line) {
+  void addAdjacentNode(Node* node) {
+    auto line = m_scene->addLine(0,0,0,0);
     addLine(line, true);
     node->addLine(line, false);
 
@@ -34,6 +43,7 @@ public:
       QPointF newPos = value.toPointF();
 
       moveLinesToCenter(newPos);
+      m_text->setPos(newPos);
     }
     return QGraphicsItem::itemChange(change, value);
   }
@@ -58,9 +68,16 @@ public:
     }
   }
 
+  std::string getText() const {
+    if (m_text == nullptr) return "";
+    return m_text->toPlainText().toStdString();
+  }
+
 private:
   // <Line, is_p1>
   QVector<QPair<QGraphicsLineItem*, bool>> m_lines;
+  QGraphicsTextItem* m_text;
+  QGraphicsScene* m_scene;
 
 signals:
 
