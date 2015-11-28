@@ -17,11 +17,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     repositorywidget.cpp \
-    paintwindow.cpp
+    paintwindow.cpp \
+    node.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
-    paintwindow.h
+    paintwindow.h \
+    node.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \
