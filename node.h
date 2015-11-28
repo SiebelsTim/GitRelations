@@ -24,8 +24,7 @@ public:
   }
 
   void addLine(QGraphicsLineItem *line, bool isPoint1) {
-    m_line = line;
-    m_is_p1 = isPoint1;
+    m_lines.push_back(QPair<QGraphicsLineItem*, bool>(line, isPoint1));
   }
 
   QVariant itemChange(GraphicsItemChange change, const QVariant& value)
@@ -34,12 +33,12 @@ public:
       // value is the new position.
       QPointF newPos = value.toPointF();
 
-      moveLineToCenter(newPos);
+      moveLinesToCenter(newPos);
     }
     return QGraphicsItem::itemChange(change, value);
   }
 
-  void moveLineToCenter(QPointF newPos) {
+  void moveLinesToCenter(QPointF newPos) {
     // Converts the elipse position (top-left)
     // to its center position
     int xOffset = rect().x() + rect().width()/2;
@@ -47,16 +46,21 @@ public:
 
     QPointF newCenterPos = QPointF(newPos.x() + xOffset, newPos.y() + yOffset);
 
-    // Move the required point of the line to the center of the elipse
-    QPointF p1 = m_is_p1 ? newCenterPos : m_line->line().p1();
-    QPointF p2 = m_is_p1 ? m_line->line().p2() : newCenterPos;
+    for (auto& line_pair : m_lines.toStdVector()) {
+      auto is_p1 = line_pair.second;
+      auto line = line_pair.first;
 
-    m_line->setLine(QLineF(p1, p2));
+      // Move the required point of the line to the center of the elipse
+      QPointF p1 = is_p1 ? newCenterPos : line->line().p1();
+      QPointF p2 = is_p1 ? line->line().p2() : newCenterPos;
+
+      line->setLine(QLineF(p1, p2));
+    }
   }
 
 private:
-  QGraphicsLineItem *m_line;
-  bool m_is_p1;
+  // <Line, is_p1>
+  QVector<QPair<QGraphicsLineItem*, bool>> m_lines;
 
 signals:
 
