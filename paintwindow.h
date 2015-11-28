@@ -10,6 +10,7 @@ class PaintWindow;
 
 class QGrapicsScene;
 class Repository;
+class Node;
 
 class PaintWindow : public QMainWindow
 {
@@ -20,6 +21,9 @@ public:
   ~PaintWindow();
 
   void splitFile(const std::string& file, std::string* root, std::string* filename);
+  void createFoldersRecursively(const std::string& rootdir,
+                                             std::map<std::string, Node*>* folders,
+                                             Node* rootnode);
 
 private:
   Ui::PaintWindow *ui;

@@ -40,7 +40,17 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
       if (rootpath == "/") {
         root->addAdjacentNode(node);
       } else {
-        // TODO: add subfolders
+        createFoldersRecursively(rootpath, &folders, root);
+        // now every subfolder should exist
+        size_t last_slash = rootpath.find_last_of('/');
+        std::string subfolder;
+        if (last_slash != std::string::npos) {
+          subfolder = rootpath.substr(last_slash + 1);
+        } else {
+          subfolder = rootpath;
+        }
+        Q_ASSERT_X(folders[subfolder] != nullptr, rootpath.c_str(), subfolder.c_str());
+        (folders[subfolder])->addAdjacentNode(node);
       }
     }
   }
@@ -52,9 +62,33 @@ inline void PaintWindow::splitFile(const std::string& file, std::string* root, s
     *filename = file;
     *root = "/";
   } else {
-    *filename = file.substr(last_slash);
+    *filename = file.substr(last_slash + 1);
     *root = file.substr(0, last_slash);
   }
+}
+
+inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
+                                                  std::map<std::string, Node*>* folders,
+                                                  Node* rootnode) {
+  size_t first_slash = rootdir.find_first_of('/');
+  std::string first;
+  if (first_slash == std::string::npos) {
+    first = rootdir;
+  } else {
+    first = rootdir.substr(0, first_slash);
+  }
+
+  Node* node;
+  if (folders->find(first) == folders->end()) { // Not Found
+    node = new Node(m_scene, first);
+    (*folders)[first] = node;
+    rootnode->addAdjacentNode(node);
+  } else {
+    node = (*folders)[first];
+  }
+
+  if (first != rootdir)
+    createFoldersRecursively(rootdir.substr(first_slash + 1), folders, node);
 }
 
 PaintWindow::~PaintWindow()
