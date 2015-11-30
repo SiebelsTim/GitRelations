@@ -1,6 +1,7 @@
 #include "paintwindow.h"
 #include "ui_paintwindow.h"
 #include "node.h"
+#include "graphicsviewzoom.h"
 
 #include "CommitIterator.h"
 #include "Commit.h"
@@ -18,6 +19,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   ui->setupUi(this);
   m_scene = new QGraphicsScene(this);
   ui->graphicsView->setScene(m_scene);
+  new GraphicsViewZoom(ui->graphicsView);
 
   auto root = new Node(m_scene, "/");
 

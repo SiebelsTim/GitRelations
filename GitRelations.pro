@@ -18,12 +18,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     repositorywidget.cpp \
     paintwindow.cpp \
-    node.cpp
+    node.cpp \
+    graphicsviewzoom.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
     paintwindow.h \
-    node.h
+    node.h \
+    graphicsviewzoom.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \
