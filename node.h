@@ -50,27 +50,33 @@ public:
       // value is the new position.
       QPointF newPos = value.toPointF();
 
-      moveLinesToCenter(newPos);
+      moveLines(newPos);
       m_text->setPos(newPos);
     }
     return QGraphicsItem::itemChange(change, value);
   }
 
-  void moveLinesToCenter(QPointF newPos) {
+  void moveLines(QPointF newPos) {
     // Converts the elipse position (top-left)
     // to its center position
     int xOffset = rect().x() + rect().width()/2;
-    int yOffset = rect().y() + rect().height()/2;
-
-    QPointF newCenterPos = QPointF(newPos.x() + xOffset, newPos.y() + yOffset);
 
     for (auto& line_pair : m_lines.toStdVector()) {
       auto is_p1 = line_pair.second;
       auto line = line_pair.first;
 
+      QPointF other_pnt = is_p1 ? line->line().p2() : line->line().p1();
+
+      QPointF newLinePos;
+      if (other_pnt.y() > newPos.y()) {
+        newLinePos = QPointF(newPos.x() + xOffset, newPos.y() + rect().height());
+      } else {
+        newLinePos = QPointF(newPos.x() + xOffset, newPos.y());
+      }
+
       // Move the required point of the line to the center of the elipse
-      QPointF p1 = is_p1 ? newCenterPos : line->line().p1();
-      QPointF p2 = is_p1 ? line->line().p2() : newCenterPos;
+      QPointF p1 = is_p1 ? newLinePos : line->line().p1();
+      QPointF p2 = is_p1 ? line->line().p2() : newLinePos;
 
       line->setLine(QLineF(p1, p2));
     }
