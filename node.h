@@ -5,11 +5,11 @@
 #include <QGraphicsTextItem>
 #include <QGraphicsScene>
 
-class Node : public QGraphicsEllipseItem
+class Node : public QGraphicsRectItem
 {
 public:
-  explicit Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect = QRectF(0, 0, 100, 100))
-    : QGraphicsEllipseItem(rect),
+  explicit Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect = QRectF(0, 0, 100, 30))
+    : QGraphicsRectItem(rect),
       m_scene(scene) {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
@@ -26,6 +26,14 @@ public:
     auto line = m_scene->addLine(0,0,0,0);
     addLine(line, true);
     node->addLine(line, false);
+    m_nodes.append(node);
+
+    qreal ypos = pos().y() + 100;
+    const auto count = m_nodes.size();
+    const auto factor = count % 2 ? -1 : 1;
+    qreal xpos = pos().x() + factor * count * 110/2;
+
+    node->setPos(xpos, ypos);
 
     // put the possibly wrong positioned line into the right position
     itemChange(ItemPositionChange, pos());
@@ -78,6 +86,7 @@ private:
   QVector<QPair<QGraphicsLineItem*, bool>> m_lines;
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
+  QVector<Node*> m_nodes;
 
 signals:
 

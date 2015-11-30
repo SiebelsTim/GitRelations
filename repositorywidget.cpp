@@ -43,5 +43,5 @@ void RepositoryWidget::loadFacts() {
 void RepositoryWidget::on_pushButton_clicked()
 {
   auto paint = new PaintWindow(this, m_repo);
-  paint->show();
+  paint->showMaximized();
 }
