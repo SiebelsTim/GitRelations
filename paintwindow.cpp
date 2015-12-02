@@ -40,7 +40,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
       auto node = new Node(m_scene, filename);
       files[file] = node;
       if (rootpath == "/") {
-        root->addAdjacentNode(node);
+        root->addChildNode(node);
       } else {
         createFoldersRecursively(rootpath, &folders, root);
         // now every subfolder should exist
@@ -52,20 +52,22 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
           subfolder = rootpath;
         }
         Q_ASSERT_X(folders[subfolder] != nullptr, rootpath.c_str(), subfolder.c_str());
-        (folders[subfolder])->addAdjacentNode(node);
+        (folders[subfolder])->addChildNode(node);
       }
     }
   }
 
+  root->arrange<true>();
   // set correct position of lines here now.
   // addAdjacentNode used to do this, but it will do some unneseccary computations
   for (const auto& folder : folders) {
-    folder.second->itemChange(Node::ItemPositionChange, folder.second->pos());
+    folder.second->arrange();
   }
 
   for (const auto& file : files) {
-    file.second->itemChange(Node::ItemPositionChange, file.second->pos());
+    file.second->arrange();
   }
+  root->itemChange(Node::ItemPositionChange, root->pos());
 }
 
 inline void PaintWindow::splitFile(const std::string& file, std::string* root, std::string* filename) {
@@ -94,7 +96,7 @@ inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
   if (folders->find(first) == folders->end()) { // Not Found
     node = new Node(m_scene, first);
     (*folders)[first] = node;
-    rootnode->addAdjacentNode(node);
+    rootnode->addChildNode(node);
   } else {
     node = (*folders)[first];
   }

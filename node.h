@@ -5,6 +5,8 @@
 #include <QGraphicsTextItem>
 #include <QGraphicsScene>
 
+#include <algorithm>
+
 class Node : public QGraphicsRectItem
 {
 public:
@@ -22,20 +24,12 @@ public:
   }
 
 
-  void addAdjacentNode(Node* node) {
+  void addChildNode(Node* node) {
     auto line = m_scene->addLine(0,0,0,0);
     addLine(line, true);
     node->addLine(line, false);
+    node->setParent(this);
     m_nodes.append(node);
-
-    qreal ypos = pos().y() + 100;
-    const auto count = m_nodes.size();
-    const auto factor = count % 2 ? -1 : 1;
-    qreal xpos = pos().x() + factor * count * 110/2;
-
-    node->setPos(xpos, ypos);
-
-    // don't check for proper lines here due to perf.
   }
 
   void addLine(QGraphicsLineItem *line, bool isPoint1) {
@@ -50,6 +44,8 @@ public:
 
       moveLines(newPos);
       m_text->setPos(newPos);
+      if (getText() != "/")
+        arrange();
     }
     return QGraphicsItem::itemChange(change, value);
   }
@@ -80,9 +76,43 @@ public:
     }
   }
 
+  template <bool isRoot = false>
+  void arrange() {
+    constexpr float TAU = 2 * 3.1415926;
+    if (isRoot) { // lay out in a circle
+      int i = 0;
+      const auto count = m_nodes.size();
+      const auto degree = TAU / count;
+      for (auto& node : m_nodes) {
+        const qreal ypos = pos().y() + 300*cos(i * degree);
+        const qreal xpos = pos().x() + 300*sin(i * degree);
+
+        node->setPos(xpos, ypos);
+        ++i;
+      }
+    } else { // lay out in a line and spread
+      int i = 0;
+      const QPointF parent_pos = m_parent->pos();
+      const QPointF pos = this->pos();
+      const int dist_x = std::min(abs(parent_pos.x() - pos.x()), 20);
+      const int dist_y = std::min(abs(parent_pos.y() - pos.y()), 20);
+      for (auto& node : m_nodes) {
+        auto factor = i % 2 == 0 ? 1 : -1;
+        int x = 2*pos.x() - parent_pos.x() + factor * dist_y*i;
+        int y = 2*pos.y() - parent_pos.y() + factor * dist_x*i;
+        node->setPos(x, y);
+        ++i;
+      }
+    }
+  }
+
   std::string getText() const {
     if (m_text == nullptr) return "";
     return m_text->toPlainText().toStdString();
+  }
+
+  void setParent(Node* parent) {
+    m_parent = parent;
   }
 
 private:
@@ -91,6 +121,7 @@ private:
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
   QVector<Node*> m_nodes;
+  Node* m_parent;
 
 signals:
 
