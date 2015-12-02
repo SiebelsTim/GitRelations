@@ -56,6 +56,16 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
       }
     }
   }
+
+  // set correct position of lines here now.
+  // addAdjacentNode used to do this, but it will do some unneseccary computations
+  for (const auto& folder : folders) {
+    folder.second->itemChange(Node::ItemPositionChange, folder.second->pos());
+  }
+
+  for (const auto& file : files) {
+    file.second->itemChange(Node::ItemPositionChange, file.second->pos());
+  }
 }
 
 inline void PaintWindow::splitFile(const std::string& file, std::string* root, std::string* filename) {

@@ -10,7 +10,7 @@ set(CMAKE_C_FLAGS_RELEASE          "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE        "-O3 -DNDEBUG")
 set(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O2 -g")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-set(CMAKE_CXX_FLAGS "-std=c++11 -g -Wall -pedantic")
+set(CMAKE_CXX_FLAGS "-std=c++11 -g -Wall -Wextra -pedantic")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
 

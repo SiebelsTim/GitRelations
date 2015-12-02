@@ -35,9 +35,7 @@ public:
 
     node->setPos(xpos, ypos);
 
-    // put the possibly wrong positioned line into the right position
-    itemChange(ItemPositionChange, pos());
-    node->itemChange(ItemPositionChange, node->pos());
+    // don't check for proper lines here due to perf.
   }
 
   void addLine(QGraphicsLineItem *line, bool isPoint1) {
