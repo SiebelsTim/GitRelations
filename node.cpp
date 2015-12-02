@@ -34,8 +34,6 @@ QVariant Node::itemChange(GraphicsItemChange change, const QVariant& value)
 
     moveLines(newPos);
     m_text->setPos(newPos);
-    if (getText() != "/")
-      arrange();
   }
   return QGraphicsItem::itemChange(change, value);
 }
