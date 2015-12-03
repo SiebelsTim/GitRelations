@@ -47,6 +47,12 @@ public:
         ++i;
       }
     }
+
+    if (m_nodes.size() > 0) {
+      for (auto& node : m_nodes) {
+        node->arrange();
+      }
+    }
   }
 
   std::string getText() const;
