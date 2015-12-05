@@ -29,6 +29,7 @@ public:
                                              TreeNode* rootnode);
 
   void drawFiles(const std::set<std::string>& affectedFiles);
+  void connectUsers();
   Contributer* addUser(const Signature& author, const std::set<std::string>& files);
 
 private:

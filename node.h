@@ -19,6 +19,10 @@ public:
   QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
 
+  bool containsChild(Node* node) const {
+    return m_nodes.contains(node);
+  }
+
   std::string getText() const;
 protected:
   // <Line, is_p1>

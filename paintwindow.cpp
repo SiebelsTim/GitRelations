@@ -12,6 +12,7 @@
 
 #include <QGraphicsItem>
 #include <QDebug>
+#include <QtConcurrent/QtConcurrent>
 
 PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   QMainWindow(parent),
@@ -37,6 +38,9 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
     addUser(commit.author(), affectedfiles);
   }
 
+  // TODO: Thread?
+  connectUsers();
+
   m_root->arrange<true>();
   // set correct position of lines here now.
   // addAdjacentNode used to do this, but it will do some unneseccary computations
@@ -48,6 +52,17 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
     file.second->arrange();
   }
   m_root->itemChange(Node::ItemPositionChange, m_root->pos());
+}
+
+void PaintWindow::connectUsers() {
+  for (auto& file : files) {
+    auto contributers = file.second->getContributers();
+    for (Contributer* contributer : contributers) {
+      for (Contributer* contributer2 : contributers) {
+        contributer->addAdjacentNode(contributer2);
+      }
+    }
+  }
 }
 
 void PaintWindow::drawFiles(const std::set<std::string>& affectedfiles) {

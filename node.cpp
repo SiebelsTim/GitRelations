@@ -15,6 +15,7 @@ Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect
 
 
 void Node::addAdjacentNode(Node* node) {
+  if (containsChild(node) || node->containsChild(this)) return;
   auto line = m_scene->addLine(0,0,0,0);
   addLine(line, true);
   node->addLine(line, false);
