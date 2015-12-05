@@ -33,8 +33,8 @@ public:
       const auto degree = (360.0f / 13) / count; // The 13 should be an 8 to be a quarter of a circle. But that's too much.
       for (auto& node : m_nodes) {
         double factor = i % 2 ? 1 : -1;
-        int x = 2*pos.x();
-        int y = 2*pos.y();
+        int x = 1.5*pos.x();
+        int y = 1.5*pos.y();
         QPointF newPos = QPointF(x, y) * QTransform().rotate(factor * degree * i);
         static_cast<TreeNode*>(node)->setPos(newPos);
         ++i;
