@@ -72,7 +72,7 @@ void PaintWindow::drawFiles(const std::set<std::string>& affectedfiles) {
   }
 }
 
-inline void PaintWindow::splitFile(const std::string& file, std::string* root, std::string* filename) {
+inline void PaintWindow::splitFile(const std::string& file, std::string* root, std::string* filename) const {
   size_t last_slash = file.find_last_of('/');
   if (last_slash == std::string::npos) {
     *filename = file;

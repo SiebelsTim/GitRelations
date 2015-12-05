@@ -21,7 +21,7 @@ public:
   explicit PaintWindow(QWidget *parent, const Repository* repo);
   ~PaintWindow();
 
-  void splitFile(const std::string& file, std::string* root, std::string* filename);
+  void splitFile(const std::string& file, std::string* root, std::string* filename) const;
   void createFoldersRecursively(const std::string& rootdir,
                                              std::map<std::string, TreeNode*>* folders,
                                              TreeNode* rootnode);
