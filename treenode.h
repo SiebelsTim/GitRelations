@@ -9,6 +9,8 @@ public:
   void addChildNode(TreeNode* node);
   void addAdjacentNode(Node* node) = delete;
 
+  QVector<Node*> getChildren() const;
+
   // This is here, because it fails to link, because <true> isn't generated
   template <bool isRoot = false>
   void arrange() {
@@ -48,8 +50,6 @@ public:
       }
     }
   }
-
-  std::string getText() const;
   void setParent(TreeNode* parent);
 private:
   TreeNode* m_parent;

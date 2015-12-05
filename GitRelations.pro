@@ -20,14 +20,16 @@ SOURCES += main.cpp\
     paintwindow.cpp \
     node.cpp \
     graphicsviewzoom.cpp \
-    treenode.cpp
+    treenode.cpp \
+    contributer.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
     paintwindow.h \
     node.h \
     graphicsviewzoom.h \
-    treenode.h
+    treenode.h \
+    contributer.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \

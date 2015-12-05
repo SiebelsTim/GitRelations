@@ -7,6 +7,7 @@
 #include "Commit.h"
 #include "Repository.h"
 #include "Diff.h"
+#include "Signature.h"
 
 #include <QGraphicsItem>
 #include <QDebug>
@@ -22,11 +23,17 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   ui->graphicsView->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView);
 
+  m_scene2 = new QGraphicsScene(this);
+  ui->graphicsView_2->setScene(m_scene2);
+  ui->graphicsView_2->setRenderHint(QPainter::Antialiasing);
+  new GraphicsViewZoom(ui->graphicsView_2);
+
   m_root = new TreeNode(m_scene, "/");
 
   for (const auto& commit : m_repo->iter()) {
     std::set<std::string> affectedfiles = commit.getAffectedFiles();
     drawFiles(affectedfiles);
+    addUser(commit.author());
   }
 
   m_root->arrange<true>();
@@ -105,6 +112,12 @@ inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
 
   if (first != rootdir)
     createFoldersRecursively(rootdir.substr(first_slash + 1), folders, node);
+}
+
+inline void PaintWindow::addUser(const Signature& author) {
+  if (m_users.find(author.name()) != m_users.end()) return;  // Found
+  auto node = new Node(m_scene2, author.name());
+  m_users[author.name()] = node;
 }
 
 PaintWindow::~PaintWindow()
