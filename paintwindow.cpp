@@ -19,6 +19,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   ui->setupUi(this);
   m_scene = new QGraphicsScene(this);
   ui->graphicsView->setScene(m_scene);
+  ui->graphicsView->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView);
 
   auto root = new Node(m_scene, "/");
