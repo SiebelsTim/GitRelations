@@ -14,11 +14,10 @@ Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect
 }
 
 
-void Node::addChildNode(Node* node) {
+void Node::addAdjacentNode(Node* node) {
   auto line = m_scene->addLine(0,0,0,0);
   addLine(line, true);
   node->addLine(line, false);
-  node->setParent(this);
   m_nodes.append(node);
 }
 
@@ -67,8 +66,4 @@ void Node::moveLines(QPointF newPos) {
 std::string Node::getText() const {
   if (m_text == nullptr) return "";
   return m_text->toPlainText().toStdString();
-}
-
-void Node::setParent(Node* parent) {
-  m_parent = parent;
 }

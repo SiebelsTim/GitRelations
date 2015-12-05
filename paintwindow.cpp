@@ -1,6 +1,6 @@
 #include "paintwindow.h"
 #include "ui_paintwindow.h"
-#include "node.h"
+#include "treenode.h"
 #include "graphicsviewzoom.h"
 
 #include "CommitIterator.h"
@@ -22,10 +22,10 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   ui->graphicsView->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView);
 
-  auto root = new Node(m_scene, "/");
+  auto root = new TreeNode(m_scene, "/");
 
-  std::map<std::string, Node*> folders;
-  std::map<std::string, Node*> files;
+  std::map<std::string, TreeNode*> folders;
+  std::map<std::string, TreeNode*> files;
 
   for (const auto& commit : m_repo->iter()) {
     std::set<std::string> affectedfiles = commit.getAffectedFiles();
@@ -38,7 +38,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
         break;
       }
 
-      auto node = new Node(m_scene, filename);
+      auto node = new TreeNode(m_scene, filename);
       files[file] = node;
       if (rootpath == "/") {
         root->addChildNode(node);
@@ -83,8 +83,8 @@ inline void PaintWindow::splitFile(const std::string& file, std::string* root, s
 }
 
 inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
-                                                  std::map<std::string, Node*>* folders,
-                                                  Node* rootnode) {
+                                                  std::map<std::string, TreeNode*>* folders,
+                                                  TreeNode* rootnode) {
   size_t first_slash = rootdir.find_first_of('/');
   std::string first;
   if (first_slash == std::string::npos) {
@@ -93,9 +93,9 @@ inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
     first = rootdir.substr(0, first_slash);
   }
 
-  Node* node;
+  TreeNode* node;
   if (folders->find(first) == folders->end()) { // Not Found
-    node = new Node(m_scene, first);
+    node = new TreeNode(m_scene, first);
     (*folders)[first] = node;
     rootnode->addChildNode(node);
   } else {

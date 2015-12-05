@@ -19,13 +19,15 @@ SOURCES += main.cpp\
     repositorywidget.cpp \
     paintwindow.cpp \
     node.cpp \
-    graphicsviewzoom.cpp
+    graphicsviewzoom.cpp \
+    treenode.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
     paintwindow.h \
     node.h \
-    graphicsviewzoom.h
+    graphicsviewzoom.h \
+    treenode.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \
