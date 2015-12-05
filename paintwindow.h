@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <set>
 
 namespace Ui {
 class PaintWindow;
@@ -25,10 +26,15 @@ public:
                                              std::map<std::string, TreeNode*>* folders,
                                              TreeNode* rootnode);
 
+  void drawFiles(const std::set<std::string>& affectedFiles);
+
 private:
   Ui::PaintWindow *ui;
   QGraphicsScene* m_scene;
   const Repository* m_repo;
+  std::map<std::string, TreeNode*> folders;
+  std::map<std::string, TreeNode*> files;
+  TreeNode* m_root;
 };
 
 #endif // PAINTWINDOW_H

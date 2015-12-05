@@ -22,43 +22,14 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   ui->graphicsView->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView);
 
-  auto root = new TreeNode(m_scene, "/");
-
-  std::map<std::string, TreeNode*> folders;
-  std::map<std::string, TreeNode*> files;
+  m_root = new TreeNode(m_scene, "/");
 
   for (const auto& commit : m_repo->iter()) {
     std::set<std::string> affectedfiles = commit.getAffectedFiles();
-    for (const std::string& file : affectedfiles) {
-      std::string rootpath;
-      std::string filename;
-      splitFile(file, &rootpath, &filename);
-
-      if (files.find(file) != files.end()) { // found
-        break;
-      }
-
-      auto node = new TreeNode(m_scene, filename);
-      files[file] = node;
-      if (rootpath == "/") {
-        root->addChildNode(node);
-      } else {
-        createFoldersRecursively(rootpath, &folders, root);
-        // now every subfolder should exist
-        size_t last_slash = rootpath.find_last_of('/');
-        std::string subfolder;
-        if (last_slash != std::string::npos) {
-          subfolder = rootpath.substr(last_slash + 1);
-        } else {
-          subfolder = rootpath;
-        }
-        Q_ASSERT_X(folders[subfolder] != nullptr, rootpath.c_str(), subfolder.c_str());
-        (folders[subfolder])->addChildNode(node);
-      }
-    }
+    drawFiles(affectedfiles);
   }
 
-  root->arrange<true>();
+  m_root->arrange<true>();
   // set correct position of lines here now.
   // addAdjacentNode used to do this, but it will do some unneseccary computations
   for (const auto& folder : folders) {
@@ -68,7 +39,37 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   for (const auto& file : files) {
     file.second->arrange();
   }
-  root->itemChange(Node::ItemPositionChange, root->pos());
+  m_root->itemChange(Node::ItemPositionChange, m_root->pos());
+}
+
+void PaintWindow::drawFiles(const std::set<std::string>& affectedfiles) {
+  for (const std::string& file : affectedfiles) {
+    std::string rootpath;
+    std::string filename;
+    splitFile(file, &rootpath, &filename);
+
+    if (files.find(file) != files.end()) { // found
+      break;
+    }
+
+    auto node = new TreeNode(m_scene, filename);
+    files[file] = node;
+    if (rootpath == "/") {
+      m_root->addChildNode(node);
+    } else {
+      createFoldersRecursively(rootpath, &folders, m_root);
+      // now every subfolder should exist
+      size_t last_slash = rootpath.find_last_of('/');
+      std::string subfolder;
+      if (last_slash != std::string::npos) {
+        subfolder = rootpath.substr(last_slash + 1);
+      } else {
+        subfolder = rootpath;
+      }
+      Q_ASSERT_X(folders[subfolder] != nullptr, rootpath.c_str(), subfolder.c_str());
+      (folders[subfolder])->addChildNode(node);
+    }
+  }
 }
 
 inline void PaintWindow::splitFile(const std::string& file, std::string* root, std::string* filename) {
