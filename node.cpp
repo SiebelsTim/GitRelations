@@ -18,6 +18,10 @@ void Node::addAdjacentNode(Node* node) {
   auto line = m_scene->addLine(0,0,0,0);
   addLine(line, true);
   node->addLine(line, false);
+  addNode(node);
+}
+
+void Node::addNode(Node* node) {
   m_nodes.append(node);
 }
 
