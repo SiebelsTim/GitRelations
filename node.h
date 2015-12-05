@@ -4,6 +4,7 @@
 #include <QGraphicsEllipseItem>
 #include <QGraphicsTextItem>
 #include <QGraphicsScene>
+#include <QGenericMatrix>
 
 #include <algorithm>
 
@@ -35,17 +36,20 @@ public:
       }
     } else { // lay out in a line and spread
       int i = 0;
-      const QPointF parent_pos = m_parent->pos();
       const QPointF pos = this->pos();
-      const int dist_x = std::min(abs(parent_pos.x() - pos.x()), 20);
-      const int dist_y = std::min(abs(parent_pos.y() - pos.y()), 20);
+      const auto count = m_nodes.count();
+      const auto degree = (360.0f / 13) / count; // The 13 should be an 8 to be a quarter of a circle. But that's too much.
       for (auto& node : m_nodes) {
-        auto factor = i % 2 == 0 ? 1 : -1;
-        int x = 2*pos.x() - parent_pos.x() + factor * dist_y*i;
-        int y = 2*pos.y() - parent_pos.y() + factor * dist_x*i;
-        node->setPos(x, y);
+        double factor = i % 2 ? 1 : -1;
+        int x = 2*pos.x();
+        int y = 2*pos.y();
+        QPointF newPos = QPointF(x, y) * QTransform().rotate(factor * degree * i);
+        node->setPos(newPos);
         ++i;
       }
+
+      // To get the proper line start, at top/bottom of the rectangle
+      m_parent->moveLines(m_parent->pos());
     }
 
     if (m_nodes.size() > 0) {
