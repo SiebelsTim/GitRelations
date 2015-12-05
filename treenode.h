@@ -2,6 +2,9 @@
 #define TREENODE_H
 #include "node.h"
 
+#include "contributer.h"
+#include <set>
+
 class TreeNode : public Node
 {
   using Node::Node;
@@ -51,8 +54,17 @@ public:
     }
   }
   void setParent(TreeNode* parent);
+
+  void addContributer(Contributer* contributer) {
+    m_contributers.insert(contributer);
+  }
+
+  std::set<Contributer*> getContributers() const {
+    return m_contributers;
+  }
 private:
   TreeNode* m_parent;
+  std::set<Contributer*> m_contributers;
 
 signals:
 

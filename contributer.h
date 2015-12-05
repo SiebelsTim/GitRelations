@@ -17,7 +17,7 @@ public:
     return getText();
   }
 
-  void addFile(const std::string&) const;
+  void addFile(const std::string&);
 
   std::map<std::string, size_t> getFiles() const {
     return m_files;

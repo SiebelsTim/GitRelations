@@ -12,7 +12,7 @@ class PaintWindow;
 class QGrapicsScene;
 class Repository;
 class TreeNode;
-class Node;
+class Contributer;
 class Signature;
 
 class PaintWindow : public QMainWindow
@@ -29,7 +29,7 @@ public:
                                              TreeNode* rootnode);
 
   void drawFiles(const std::set<std::string>& affectedFiles);
-  void addUser(const Signature& author);
+  Contributer* addUser(const Signature& author, const std::set<std::string>& files);
 
 private:
   Ui::PaintWindow *ui;
@@ -40,7 +40,7 @@ private:
   std::map<std::string, TreeNode*> files;
   TreeNode* m_root;
 
-  std::map<std::string, Node*> m_users;
+  std::map<std::string, Contributer*> m_users;
 };
 
 #endif // PAINTWINDOW_H

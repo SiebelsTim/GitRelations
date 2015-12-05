@@ -26,3 +26,11 @@ TreeNode* Contributer::findNodeByPath(const TreeNode* root, const std::string& p
   Q_ASSERT(false);
   return nullptr;
 }
+
+void Contributer::addFile(const std::string& path) {
+  if (m_files.find(path) != m_files.end()) { // found
+    ++m_files[path];
+  } else {
+    m_files[path] = 1;
+  }
+ }

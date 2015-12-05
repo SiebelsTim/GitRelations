@@ -2,6 +2,7 @@
 #include "ui_paintwindow.h"
 #include "treenode.h"
 #include "graphicsviewzoom.h"
+#include "contributer.h"
 
 #include "CommitIterator.h"
 #include "Commit.h"
@@ -33,7 +34,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   for (const auto& commit : m_repo->iter()) {
     std::set<std::string> affectedfiles = commit.getAffectedFiles();
     drawFiles(affectedfiles);
-    addUser(commit.author());
+    addUser(commit.author(), affectedfiles);
   }
 
   m_root->arrange<true>();
@@ -114,10 +115,22 @@ inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
     createFoldersRecursively(rootdir.substr(first_slash + 1), folders, node);
 }
 
-inline void PaintWindow::addUser(const Signature& author) {
-  if (m_users.find(author.name()) != m_users.end()) return;  // Found
-  auto node = new Node(m_scene2, author.name());
-  m_users[author.name()] = node;
+inline Contributer* PaintWindow::addUser(const Signature& author, const std::set<std::string>& files) {
+  Contributer* contrib;
+  if (m_users.find(author.name()) != m_users.end()) { // Found
+    contrib = m_users[author.name()];
+  } else {
+    contrib = new Contributer(m_scene2, author.name());
+    m_users[author.name()] = contrib;
+  }
+
+  for (const auto& file : files) {
+    contrib->addFile(file);
+    if (this->files.find(file) != this->files.end())
+      this->files[file]->addContributer(contrib);
+  }
+
+  return contrib;
 }
 
 PaintWindow::~PaintWindow()
