@@ -137,6 +137,7 @@ inline Contributer* PaintWindow::addUser(const Signature& author, const std::set
   } else {
     contrib = new Contributer(m_scene2, author.name());
     m_users[author.name()] = contrib;
+    ui->userList->addItem(contrib);
   }
 
   for (const auto& file : files) {
