@@ -41,15 +41,6 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   connectUsers();
 
   m_root->arrange<true>();
-  // set correct position of lines here now.
-  // addAdjacentNode used to do this, but it will do some unneseccary computations
-  for (const auto& folder : folders) {
-    folder.second->arrange();
-  }
-
-  for (const auto& file : files) {
-    file.second->arrange();
-  }
   m_root->itemChange(Node::ItemPositionChange, m_root->pos());
 }
 
