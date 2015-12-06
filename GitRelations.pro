@@ -29,7 +29,8 @@ HEADERS  += mainwindow.h \
     node.h \
     graphicsviewzoom.h \
     treenode.h \
-    contributer.h
+    contributer.h \
+    macros.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \
