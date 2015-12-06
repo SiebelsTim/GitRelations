@@ -23,11 +23,11 @@ void Node::addAdjacentNode(Node* node) {
 }
 
 void Node::addNode(Node* node) {
-  m_nodes.append(node);
+  m_nodes.insert(node);
 }
 
 void Node::addLine(QGraphicsLineItem *line, bool isPoint1) {
-  m_lines.push_back(QPair<QGraphicsLineItem*, bool>(line, isPoint1));
+  m_lines.emplace(line, isPoint1);
 }
 
 QVariant Node::itemChange(GraphicsItemChange change, const QVariant& value)
@@ -47,7 +47,7 @@ void Node::moveLines(QPointF newPos) {
   // to its center position
   int xOffset = rect().x() + rect().width()/2;
 
-  for (auto& line_pair : m_lines.toStdVector()) {
+  for (auto& line_pair : m_lines) {
     auto is_p1 = line_pair.second;
     auto line = line_pair.first;
 

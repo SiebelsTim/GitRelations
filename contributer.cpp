@@ -6,7 +6,7 @@ TreeNode* Contributer::findNodeByPath(const TreeNode* root, const std::string& p
   auto firstslash = path.find_first_of('/');
   if (firstslash != std::string::npos) { // Found
     std::string firstfolder = path.substr(0, firstslash);
-    QVector<Node*> children = root->getChildren();
+    std::set<Node*> children = root->getChildren();
     for (const auto& node : children) {
       TreeNode* tnode = static_cast<TreeNode*>(node);
       if (tnode->getText() == firstfolder) {
@@ -15,7 +15,7 @@ TreeNode* Contributer::findNodeByPath(const TreeNode* root, const std::string& p
       }
     }
   } else { // Not found == root
-    QVector<Node*> children = root->getChildren();
+    std::set<Node*> children = root->getChildren();
     for (const auto& node : children) {
       TreeNode* tnode = static_cast<TreeNode*>(node);
       if (tnode->getText() == path) {

@@ -11,6 +11,6 @@ void TreeNode::setParent(TreeNode* parent) {
   m_parent = parent;
 }
 
-QVector<Node*> TreeNode::getChildren() const {
+std::set<Node*> TreeNode::getChildren() const {
   return m_nodes;
 }

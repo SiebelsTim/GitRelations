@@ -12,7 +12,6 @@
 
 #include <QGraphicsItem>
 #include <QDebug>
-#include <QtConcurrent/QtConcurrent>
 
 PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   QMainWindow(parent),

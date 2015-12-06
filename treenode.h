@@ -12,7 +12,7 @@ public:
   void addChildNode(TreeNode* node);
   void addAdjacentNode(Node* node) = delete;
 
-  QVector<Node*> getChildren() const;
+  std::set<Node*> getChildren() const;
 
   // This is here, because it fails to link, because <true> isn't generated
   template <bool isRoot = false>
@@ -32,7 +32,7 @@ public:
     } else { // lay out in a line and spread
       int i = 0;
       const QPointF pos = this->pos();
-      const auto count = m_nodes.count();
+      const auto count = m_nodes.size();
       const auto degree = (360.0f / 13) / count; // The 13 should be an 8 to be a quarter of a circle. But that's too much.
       for (auto& node : m_nodes) {
         double factor = i % 2 ? 1 : -1;

@@ -5,7 +5,7 @@
 #include <QGraphicsTextItem>
 #include <QGraphicsScene>
 
-#include <algorithm>
+#include <set>
 
 class Node : public QGraphicsRectItem
 {
@@ -20,16 +20,16 @@ public:
   void moveLines(QPointF newPos);
 
   bool containsChild(Node* node) const {
-    return m_nodes.contains(node);
+    return m_nodes.count(node) != 0;
   }
 
   std::string getText() const;
 protected:
   // <Line, is_p1>
-  QVector<QPair<QGraphicsLineItem*, bool>> m_lines;
+  std::set<std::pair<QGraphicsLineItem*, bool>> m_lines;
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
-  QVector<Node*> m_nodes;
+  std::set<Node*> m_nodes;
 
 signals:
 
