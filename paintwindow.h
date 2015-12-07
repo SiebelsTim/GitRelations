@@ -28,9 +28,9 @@ public:
                                 std::map<std::string, TreeNode*>* folders,
                                 TreeNode* rootnode);
 
-  void drawFiles(const std::set<std::string>& affectedFiles);
+  void drawFiles(const std::vector<std::string>& affectedFiles);
   void connectUsers();
-  Contributer* addUser(const Signature& author, const std::set<std::string>& files);
+  Contributer* addUser(const Signature& author, const std::vector<std::string>& files);
 
 private:
   Ui::PaintWindow *ui;

@@ -32,7 +32,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   m_root = new TreeNode(m_scene, "/");
 
   for (const auto& commit : m_repo->iter()) {
-    std::set<std::string> affectedfiles = commit.getAffectedFiles();
+    std::vector<std::string> affectedfiles = commit.getAffectedFiles();
     drawFiles(affectedfiles);
     addUser(commit.author(), affectedfiles);
   }
@@ -55,7 +55,7 @@ void PaintWindow::connectUsers() {
   }
 }
 
-void PaintWindow::drawFiles(const std::set<std::string>& affectedfiles) {
+void PaintWindow::drawFiles(const std::vector<std::string>& affectedfiles) {
   for (const std::string& file : affectedfiles) {
     std::string rootpath;
     std::string filename;
@@ -120,7 +120,7 @@ inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
     createFoldersRecursively(rootdir.substr(first_slash + 1), folders, node);
 }
 
-inline Contributer* PaintWindow::addUser(const Signature& author, const std::set<std::string>& files) {
+inline Contributer* PaintWindow::addUser(const Signature& author, const std::vector<std::string>& files) {
   Contributer* contrib;
   if (m_users.find(author.name()) != m_users.end()) { // Found
     contrib = m_users[author.name()];
