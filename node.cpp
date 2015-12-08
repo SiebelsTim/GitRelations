@@ -1,6 +1,9 @@
 #include "node.h"
 
-Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect /* = QRectF(0, 0, 100, 30)*/)
+#include <QPainter>
+#include "treenode.h"
+
+Node::Node(QGraphicsScene* scene, const std::string& content, const bool isLeaf /* = false*/, const QRectF& rect /* = QRectF(0, 0, 100, 30)*/)
   : QGraphicsRectItem(rect),
     m_scene(scene) {
   setFlag(QGraphicsItem::ItemIsMovable);
@@ -11,6 +14,8 @@ Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect
   m_text->setPos(rect.topLeft());
   m_scene->addItem(m_text);
   m_scene->addItem(this);
+
+  setIsLeaf(isLeaf);
 }
 
 
@@ -20,6 +25,10 @@ void Node::addAdjacentNode(Node* node) {
   addLine(line, true);
   node->addLine(line, false);
   addNode(node);
+
+  if (isLeaf() || node->isLeaf()) {
+    line->setVisible(false);
+  }
 }
 
 void Node::addNode(Node* node) {
@@ -38,6 +47,11 @@ QVariant Node::itemChange(GraphicsItemChange change, const QVariant& value)
 
     moveLines(newPos);
     m_text->setPos(newPos);
+
+    auto treenode = dynamic_cast<TreeNode*>(this);
+    if (treenode && LIKELY(getText() != "/")) {
+      treenode->arrange();
+    }
   }
   return QGraphicsItem::itemChange(change, value);
 }
@@ -68,7 +82,34 @@ void Node::moveLines(QPointF newPos) {
   }
 }
 
+void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  if (m_is_leaf) {
+    painter->drawEllipse(rect());
+  } else {
+    QGraphicsRectItem::paint(painter, option, widget);
+  }
+}
+
 std::string Node::getText() const {
   if (m_text == nullptr) return "";
   return m_text->toPlainText().toStdString();
+}
+
+void Node::setIsLeaf(const bool isLeaf) {
+  if (isLeaf && !m_is_leaf) {
+    setRect(0, 0, LEAF_SIZE, LEAF_SIZE);
+    m_text->setVisible(false);
+    for (auto& line : m_lines) {
+      line.first->setVisible(false);
+    }
+  } else if(!isLeaf && m_is_leaf) {
+    setRect(0, 0, 100, 30);
+    m_text->setVisible(true);
+  }
+  m_is_leaf = isLeaf;
+  update();
+}
+
+bool Node::isLeaf() const {
+  return m_is_leaf;
 }

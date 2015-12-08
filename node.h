@@ -10,7 +10,10 @@
 class Node : public QGraphicsRectItem
 {
 public:
-  explicit Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect = QRectF(0, 0, 100, 30));
+  explicit Node(QGraphicsScene* scene,
+                const std::string& content,
+                const bool isLeaf = false,
+                const QRectF& rect = QRectF(0, 0, 100, 30));
 
   void addAdjacentNode(Node* node);
   // This is the same as addAdjacentNode, but it only adds it to the vector
@@ -18,6 +21,12 @@ public:
   void addLine(QGraphicsLineItem *line, bool isPoint1);
   QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
+
+  void setIsLeaf(const bool isLeaf);
+  bool isLeaf() const;
+
+  // handles painting leaf as a circle
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
   bool containsChild(Node* node) const {
     return m_nodes.count(node) != 0;
@@ -30,6 +39,7 @@ protected:
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
   std::set<Node*> m_nodes;
+  bool m_is_leaf;
 
 signals:
 

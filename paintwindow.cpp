@@ -65,7 +65,7 @@ void PaintWindow::drawFiles(const std::vector<std::string>& affectedfiles) {
       break;
     }
 
-    auto node = new TreeNode(m_scene, filename);
+    auto node = new TreeNode(m_scene, filename, true);
     files[file] = node;
     if (rootpath == "/") {
       m_root->addChildNode(node);
