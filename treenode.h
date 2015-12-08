@@ -8,8 +8,19 @@
 
 class TreeNode : public Node
 {
-  using Node::Node;
 public:
+  explicit TreeNode(QGraphicsScene* scene,
+                const std::string& content,
+                const bool isLeaf = false,
+                const QRectF& rect = QRectF(0, 0, 100, 30))
+    : Node(scene, content, isLeaf, rect){
+
+    setAcceptHoverEvents(true);
+  }
+
+  virtual void hoverEnterEvent(QGraphicsSceneHoverEvent * event) override;
+  virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent * event) override;
+
   void addChildNode(TreeNode* node);
   void addAdjacentNode(Node* node) = delete;
 
