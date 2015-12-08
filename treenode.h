@@ -40,7 +40,7 @@ public:
     }
     int leafcount = 0;
     int distance = width/2; // init to LEAF_SIZE in first loop
-    const auto degree = (360.0f / 4) / count;
+    const auto degree = (360.0f / 8) / count;
 
     auto leafs_per_circle = 2;
     auto leafdegree = TAU / leafs_per_circle;
@@ -70,8 +70,9 @@ public:
           ++i;
         } else { // in a line and spread
           double factor = i % 2 ? 1 : -1;
-          int x = 2*pos.x();
-          int y = 2*pos.y();
+
+          int x = 1.7*pos.x();
+          int y = 1.7*pos.y();
           QPointF newPos = QPointF(x, y) * QTransform().rotate(factor * degree * i);
           node->setPos(newPos);
           ++i;
