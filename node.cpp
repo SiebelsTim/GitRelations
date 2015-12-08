@@ -47,11 +47,6 @@ QVariant Node::itemChange(GraphicsItemChange change, const QVariant& value)
 
     moveLines(newPos);
     m_text->setPos(newPos);
-
-    auto treenode = dynamic_cast<TreeNode*>(this);
-    if (treenode && LIKELY(getText() != "/")) {
-      treenode->arrange();
-    }
   }
   return QGraphicsItem::itemChange(change, value);
 }

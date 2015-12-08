@@ -19,7 +19,7 @@ public:
   // This is the same as addAdjacentNode, but it only adds it to the vector
   void addNode(Node* node);
   void addLine(QGraphicsLineItem *line, bool isPoint1);
-  QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+  virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
 
   void setIsLeaf(const bool isLeaf);
