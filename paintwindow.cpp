@@ -1,6 +1,7 @@
 #include "paintwindow.h"
 #include "ui_paintwindow.h"
 #include "treenode.h"
+#include "leafnode.h"
 #include "graphicsviewzoom.h"
 #include "contributer.h"
 
@@ -65,7 +66,7 @@ void PaintWindow::drawFiles(const std::vector<std::string>& affectedfiles) {
       break;
     }
 
-    auto node = new TreeNode(m_scene, filename, true);
+    auto node = new LeafNode(m_scene, filename);
     files[file] = node;
     if (rootpath == "/") {
       m_root->addChildNode(node);

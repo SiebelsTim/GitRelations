@@ -12,7 +12,6 @@ class Node : public QGraphicsRectItem
 public:
   explicit Node(QGraphicsScene* scene,
                 const std::string& content,
-                const bool isLeaf = false,
                 const QRectF& rect = QRectF(0, 0, 100, 30));
 
   void addAdjacentNode(Node* node);
@@ -22,11 +21,6 @@ public:
   virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
 
-  void setIsLeaf(const bool isLeaf);
-  bool isLeaf() const;
-
-  // handles painting leaf as a circle
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
   bool containsChild(Node* node) const {
     return m_nodes.count(node) != 0;

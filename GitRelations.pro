@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     node.cpp \
     graphicsviewzoom.cpp \
     treenode.cpp \
-    contributer.cpp
+    contributer.cpp \
+    leafnode.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     graphicsviewzoom.h \
     treenode.h \
     contributer.h \
-    macros.h
+    macros.h \
+    leafnode.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \
