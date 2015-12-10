@@ -14,6 +14,8 @@ public:
 
   TreeNode* findNodeByPath(const TreeNode* root, const std::string& path) const;
 
+  void addAdjacentNode(Node* node);
+
   std::string getName() const {
     return getText();
   }

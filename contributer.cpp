@@ -33,4 +33,9 @@ void Contributer::addFile(const std::string& path) {
   } else {
     m_files[path] = 1;
   }
- }
+}
+
+void Contributer::addAdjacentNode(Node* node) {
+  Node::addAdjacentNode(node);
+  node->addNode(this);
+}
