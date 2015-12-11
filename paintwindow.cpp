@@ -7,6 +7,8 @@
 
 #include "CommitIterator.h"
 #include "Commit.h"
+#include "CommitX.h"
+#include "FileStat.h"
 #include "Repository.h"
 #include "Diff.h"
 #include "Signature.h"
@@ -32,13 +34,13 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
 
   m_root = new TreeNode(m_scene, "/");
 
-  for (const auto& commit : m_repo->iter()) {
-    std::vector<std::string> affectedfiles = commit.getAffectedFiles();
+  std::vector<CommitX*> commits = m_repo->getAllCommitsX();
+  for (const auto& commit : commits) {
+    std::vector<FileStat> affectedfiles = commit->getFiles();
     drawFiles(affectedfiles);
-    addUser(commit.author(), affectedfiles);
+    addUser(commit->getAuthor(), affectedfiles);
   }
 
-  // TODO: Thread?
   connectUsers();
 
   m_root->arrange<true>();
@@ -56,8 +58,9 @@ void PaintWindow::connectUsers() {
   }
 }
 
-void PaintWindow::drawFiles(const std::vector<std::string>& affectedfiles) {
-  for (const std::string& file : affectedfiles) {
+void PaintWindow::drawFiles(const std::vector<FileStat>& affectedfiles) {
+  for (const FileStat& filestat : affectedfiles) {
+    std::string file = filestat.filename;
     std::string rootpath;
     std::string filename;
     splitFile(file, &rootpath, &filename);
@@ -121,20 +124,20 @@ inline void PaintWindow::createFoldersRecursively(const std::string& rootdir,
     createFoldersRecursively(rootdir.substr(first_slash + 1), folders, node);
 }
 
-inline Contributer* PaintWindow::addUser(const Signature& author, const std::vector<std::string>& files) {
+inline Contributer* PaintWindow::addUser(const std::string& author, const std::vector<FileStat>& files) {
   Contributer* contrib;
-  if (m_users.find(author.name()) != m_users.end()) { // Found
-    contrib = m_users[author.name()];
+  if (m_users.find(author) != m_users.end()) { // Found
+    contrib = m_users[author];
   } else {
-    contrib = new Contributer(m_scene2, author.name());
-    m_users[author.name()] = contrib;
+    contrib = new Contributer(m_scene2, author);
+    m_users[author] = contrib;
     ui->userList->addItem(contrib);
   }
 
-  for (const auto& file : files) {
-    contrib->addFile(file);
-    if (this->files.find(file) != this->files.end())
-      this->files[file]->addContributer(contrib);
+  for (const auto& filestat : files) {
+    contrib->addFile(filestat.filename);
+    if (this->files.find(filestat.filename) != this->files.end())
+      this->files[filestat.filename]->addContributer(contrib);
   }
 
   return contrib;

@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 #include <set>
 
+#include "FileStat.h"
+
 namespace Ui {
 class PaintWindow;
 }
@@ -28,9 +30,9 @@ public:
                                 std::map<std::string, TreeNode*>* folders,
                                 TreeNode* rootnode);
 
-  void drawFiles(const std::vector<std::string>& affectedFiles);
+  void drawFiles(const std::vector<FileStat>& affectedFiles);
   void connectUsers();
-  Contributer* addUser(const Signature& author, const std::vector<std::string>& files);
+  Contributer* addUser(const std::string& author, const std::vector<FileStat>& files);
 
 private:
   Ui::PaintWindow *ui;
