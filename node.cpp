@@ -79,3 +79,25 @@ std::string Node::getText() const {
   return m_text->toPlainText().toStdString();
 }
 
+
+void Node::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+  QColor red = QColor::fromRgb(255, 0, 0);
+  for (auto& line : m_lines) {
+    QPen pen = line.second.first->pen();
+    pen.setColor(red);
+    line.second.first->setPen(pen);
+  }
+
+  QGraphicsRectItem::mousePressEvent(event);
+}
+
+void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+  QColor black = QColor::fromRgb(0, 0, 0);
+  for (auto& line : m_lines) {
+    QPen pen = line.second.first->pen();
+    pen.setColor(black);
+    line.second.first->setPen(pen);
+  }
+
+  QGraphicsRectItem::mouseReleaseEvent(event);
+}

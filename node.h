@@ -21,6 +21,9 @@ public:
   virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
 
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+
 
   bool containsChild(Node* node) const {
     return m_nodes.count(node) != 0;
