@@ -52,7 +52,18 @@ void PaintWindow::connectUsers() {
     auto contributers = file.second->getContributers();
     for (Contributer* contributer : contributers) {
       for (Contributer* contributer2 : contributers) {
-        contributer->addAdjacentNode(contributer2);
+        if (contributer == contributer2) {
+          continue;
+        }
+
+        QGraphicsLineItem* line = contributer->addAdjacentNode(contributer2);
+        Q_ASSERT(line);
+        QPen pen = line->pen();
+        auto width = pen.width();
+        if (width < 10) {
+          pen.setWidth(width + 1);
+          line->setPen(pen);
+        }
       }
     }
   }

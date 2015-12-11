@@ -1,5 +1,6 @@
 #include "node.h"
 
+#include <utility>
 #include <QPainter>
 #include "treenode.h"
 
@@ -17,20 +18,21 @@ Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect
 }
 
 
-void Node::addAdjacentNode(Node* node) {
-  if (containsChild(node) || node->containsChild(this)) return;
+QGraphicsLineItem* Node::addAdjacentNode(Node* node) {
+  if (containsChild(node) || node->containsChild(this)) return m_lines[node].first;
   auto line = m_scene->addLine(0,0,0,0);
-  addLine(line, true);
-  node->addLine(line, false);
+  addLine(line, true, node);
+  node->addLine(line, false, this);
   addNode(node);
+  return line;
 }
 
 void Node::addNode(Node* node) {
   m_nodes.insert(node);
 }
 
-void Node::addLine(QGraphicsLineItem *line, bool isPoint1) {
-  m_lines.emplace(line, isPoint1);
+void Node::addLine(QGraphicsLineItem *line, bool isPoint1, Node* node) {
+  m_lines[node] = std::make_pair(line, isPoint1);
 }
 
 QVariant Node::itemChange(GraphicsItemChange change, const QVariant& value)
@@ -51,8 +53,8 @@ void Node::moveLines(QPointF newPos) {
   int xOffset = rect().x() + rect().width()/2;
 
   for (auto& line_pair : m_lines) {
-    auto is_p1 = line_pair.second;
-    auto line = line_pair.first;
+    auto is_p1 = line_pair.second.second;
+    auto line = line_pair.second.first;
 
     QPointF other_pnt = is_p1 ? line->line().p2() : line->line().p1();
 

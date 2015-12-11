@@ -35,7 +35,8 @@ void Contributer::addFile(const std::string& path) {
   }
 }
 
-void Contributer::addAdjacentNode(Node* node) {
-  Node::addAdjacentNode(node);
+QGraphicsLineItem* Contributer::addAdjacentNode(Node* node) {
+  auto ret = Node::addAdjacentNode(node);
   node->addNode(this);
+  return ret;
 }

@@ -14,10 +14,10 @@ public:
                 const std::string& content,
                 const QRectF& rect = QRectF(0, 0, 100, 30));
 
-  void addAdjacentNode(Node* node);
+  QGraphicsLineItem* addAdjacentNode(Node* node);
   // This is the same as addAdjacentNode, but it only adds it to the vector
   void addNode(Node* node);
-  void addLine(QGraphicsLineItem *line, bool isPoint1);
+  void addLine(QGraphicsLineItem *line, bool isPoint1, Node* node);
   virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
 
@@ -29,7 +29,7 @@ public:
   std::string getText() const;
 protected:
   // <Line, is_p1>
-  std::set<std::pair<QGraphicsLineItem*, bool>> m_lines;
+  std::map<Node*, std::pair<QGraphicsLineItem*, bool>> m_lines;
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
   std::set<Node*> m_nodes;
