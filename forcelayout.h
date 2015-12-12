@@ -19,7 +19,7 @@ public:
 
   void exportToFile(const std::string& filename) const;
 
-  void layout();
+  void layout(const char* algo);
 
 private:
   std::set<Contributer*> m_nodes;

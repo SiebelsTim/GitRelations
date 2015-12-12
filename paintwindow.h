@@ -38,6 +38,8 @@ public:
 
   void calcStrengthLimits(std::set<Contributer*>) const;
 
+  void layout(const char* algorithm);
+
 private:
   Ui::PaintWindow *ui;
   QGraphicsScene* m_scene;
@@ -51,17 +53,52 @@ private:
   LayoutThread* m_layout;
 
 public slots:
+  inline void layoutDot() {
+    layout("dot");
+  }
+  inline void layoutCirco() {
+    layout("circo");
+  }
+  inline void layoutFdp() {
+    layout("fdp");
+  }
+  inline void layoutNeato() {
+    layout("neato");
+  }
+  inline void layoutNop() {
+    layout("nop");
+  }
+  inline void layoutNop1() {
+    layout("nop1");
+  }
+  inline void layoutNop2() {
+    layout("nop2");
+  }
+  inline void layoutOsage() {
+    layout("osage");
+  }
+  inline void layoutPatchwork() {
+    layout("patchwork");
+  }
+  inline void layoutSfdp() {
+    layout("sfdp");
+  }
+  inline void layoutTwopi() {
+    layout("twopi");
+  }
+
   void setPos(Contributer* contrib, int x, int y);
 };
 
 
 
 class LayoutThread : public QThread {
-  PaintWindow* m_paintwindow;
+  const PaintWindow* m_paintwindow;
   std::set<Contributer*> m_contribs;
+  const char* m_algo;
 public:
-  LayoutThread(PaintWindow* paintwindow, std::set<Contributer*> contribs):
-    QThread(), m_paintwindow(paintwindow), m_contribs(contribs){
+  LayoutThread(PaintWindow* paintwindow, std::set<Contributer*> contribs, const char* algorithm):
+    QThread(), m_paintwindow(paintwindow), m_contribs(contribs), m_algo(algorithm){
     Q_ASSERT(paintwindow);
   }
 

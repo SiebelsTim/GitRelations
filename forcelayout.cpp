@@ -45,14 +45,14 @@ void ForceLayout::exportToFile(const std::string& filename) const {
 // Holy shit libgraphviz is bad. char* instead of const char
 // you need to gvRender() before positions are available
 // gvLayout() isn't enough. Fuck you.
-void ForceLayout::layout() {
+void ForceLayout::layout(const char* algo) {
   Agraph_t* G;
   GVC_t* gvc = gvContext();
 
   FILE* fp = fopen("dot.dot", "r");
   G = agread(fp, 0);
 
-  gvLayout(gvc, G, "dot");
+  gvLayout(gvc, G, algo);
   gvRender(gvc, G, "dot", nullptr);
 
   gvRenderFilename(gvc, G, "png", "graph.png");

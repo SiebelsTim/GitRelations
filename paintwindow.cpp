@@ -25,6 +25,20 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   m_repo(repo)
 {
   ui->setupUi(this);
+
+  QMenu* layoutMenu = ui->menubar->addMenu("Layout");
+  layoutMenu->addAction("dot", this, SLOT(layoutDot()));
+  layoutMenu->addAction("circo", this, SLOT(layoutCirco()));
+  layoutMenu->addAction("fdp", this, SLOT(layoutFdp()));
+  layoutMenu->addAction("neato", this, SLOT(layoutNeato()));
+  layoutMenu->addAction("nop", this, SLOT(layoutNop()));
+  layoutMenu->addAction("nop1", this, SLOT(layoutNop1()));
+  layoutMenu->addAction("nop2", this, SLOT(layoutNop2()));
+  layoutMenu->addAction("osage", this, SLOT(layoutOsage()));
+  layoutMenu->addAction("patchwork", this, SLOT(layoutPatchwork()));
+  layoutMenu->addAction("sfdp", this, SLOT(layoutSfdp()));
+  layoutMenu->addAction("twopi", this, SLOT(layoutTwopi()));
+
   m_scene = new QGraphicsScene(this);
   ui->graphicsView->setScene(m_scene);
   ui->graphicsView->setRenderHint(QPainter::Antialiasing);
@@ -71,7 +85,7 @@ void PaintWindow::connectUsers() {
     }
   }
 
-  m_layout = new LayoutThread(this, contribs);
+  m_layout = new LayoutThread(this, contribs, "dot");
   m_layout->start();
 
 }
@@ -169,6 +183,28 @@ void PaintWindow::setPos(Contributer *contrib, int x, int y) {
   contrib->setPos(x, y);
 }
 
+
+void PaintWindow::layout(const char* algorithm) {
+  std::set<Contributer*> contribs;
+  for (auto& file : files) {
+    auto contributers = file.second->getContributers();
+    for (Contributer* contributer : contributers) {
+      contribs.insert(contributer);
+      for (Contributer* contributer2 : contributers) {
+        if (contributer == contributer2) {
+          continue;
+        }
+        contributer->addAdjacentNode(contributer2);
+      }
+    }
+  }
+
+  m_layout->wait();
+  delete m_layout;
+  m_layout = new LayoutThread(this, contribs, algorithm);
+  m_layout->start();
+}
+
 PaintWindow::~PaintWindow()
 {
   // We need terminate here because we may stuck in the library function
@@ -186,7 +222,7 @@ void LayoutThread::run() {
            m_paintwindow, &PaintWindow::setPos);
    layout.exportToFile("dot.dot");
    qDebug() << "Exported";
-   layout.layout();
+   layout.layout(m_algo);
    qDebug() << "layout finished";
 
    return;
