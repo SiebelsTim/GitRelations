@@ -24,7 +24,7 @@ public:
   }
 
   void addFile(const std::string&);
-
+  bool hasFile(const std::string& str) const;
   std::map<std::string, size_t> getFiles() const {
     return m_files;
   }
@@ -36,6 +36,8 @@ public:
   std::vector<LeafNode*> getLeafs() const {
     return m_leafs;
   }
+
+  int calculateStrength(const Contributer& contrib) const;
 
 private:
   std::map<std::string, size_t> m_files;
