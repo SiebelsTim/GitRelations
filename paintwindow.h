@@ -34,6 +34,8 @@ public:
   void connectUsers();
   Contributer* addUser(const std::string& author, const std::vector<FileStat>& files);
 
+  void calcStrengthLimits(std::set<Contributer*>) const;
+
 private:
   Ui::PaintWindow *ui;
   QGraphicsScene* m_scene;

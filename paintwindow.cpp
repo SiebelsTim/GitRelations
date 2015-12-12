@@ -15,6 +15,7 @@
 #include "Signature.h"
 
 #include <QGraphicsItem>
+#include <QtConcurrent/QtConcurrent>
 #include <QDebug>
 
 PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
@@ -63,6 +64,11 @@ void PaintWindow::connectUsers() {
     }
   }
 
+  QtConcurrent::run(this, &PaintWindow::calcStrengthLimits, contribs);
+
+}
+
+void PaintWindow::calcStrengthLimits(std::set<Contributer*> contribs) const {
   int max = 0;
   int min = INT_MAX;
   // get max and min strength
@@ -74,6 +80,7 @@ void PaintWindow::connectUsers() {
       min = std::min(min, strength);
     }
   }
+  // TODO: emit to object
 }
 
 void PaintWindow::drawFiles(Contributer* contrib, const std::vector<FileStat>& affectedfiles) {
