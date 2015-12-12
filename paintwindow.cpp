@@ -47,6 +47,12 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
 
   g_root->arrange<true>();
   g_root->itemChange(Node::ItemPositionChange, g_root->pos());
+
+  // deallocate vector
+  for (CommitX* commit : commits) {
+    delete commit;
+  }
+  commits.clear();
 }
 
 void PaintWindow::connectUsers() {
