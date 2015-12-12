@@ -30,7 +30,7 @@ public:
                                 std::map<std::string, TreeNode*>* folders,
                                 TreeNode* rootnode);
 
-  void drawFiles(const std::vector<FileStat>& affectedFiles);
+  void drawFiles(Contributer* contrib, const std::vector<FileStat>& affectedFiles);
   void connectUsers();
   Contributer* addUser(const std::string& author, const std::vector<FileStat>& files);
 
@@ -41,7 +41,6 @@ private:
   const Repository* m_repo;
   std::map<std::string, TreeNode*> folders;
   std::map<std::string, TreeNode*> files;
-  TreeNode* m_root;
 
   std::map<std::string, Contributer*> m_users;
 };

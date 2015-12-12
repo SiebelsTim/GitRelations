@@ -82,13 +82,13 @@ public:
     m_contributers.insert(contributer);
   }
 
-  std::multiset<Contributer*> getContributers() const {
+  std::set<Contributer*> getContributers() const {
     return m_contributers;
   }
 
 private:
   TreeNode* m_parent;
-  std::multiset<Contributer*> m_contributers;
+  std::set<Contributer*> m_contributers;
   std::set<LeafNode*> m_leafs;
 
 };

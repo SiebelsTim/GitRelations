@@ -3,6 +3,8 @@
 
 #include <ctime>
 
+class TreeNode;
+
 template <typename T>
 inline int sgn(T val) {
     return (T(0) < val) - (val < T(0));
@@ -14,5 +16,7 @@ inline int sgn(T val) {
 #define MEASURE(x)  time_t start=std::clock(); [&]{x}(); qDebug() << QString::number(std::clock() - start) << " elapsed\n";
 
 #define LEAF_SIZE 30
+
+extern TreeNode* g_root;
 
 #endif // MACROS_H

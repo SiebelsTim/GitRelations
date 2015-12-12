@@ -3,6 +3,7 @@
 #include <QPainter>
 
 void LeafNode::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*) {
+  painter->setPen(pen());
   painter->drawEllipse(rect());
 }
 

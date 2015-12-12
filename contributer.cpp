@@ -1,5 +1,7 @@
 #include "contributer.h"
 #include "treenode.h"
+#include "leafnode.h"
+#include "macros.h"
 
 
 TreeNode* Contributer::findNodeByPath(const TreeNode* root, const std::string& path) const {
@@ -15,15 +17,14 @@ TreeNode* Contributer::findNodeByPath(const TreeNode* root, const std::string& p
       }
     }
   } else { // Not found == root
-    std::set<Node*> children = root->getChildren();
+    std::set<LeafNode*> children = root->getLeafs();
     for (const auto& node : children) {
-      TreeNode* tnode = static_cast<TreeNode*>(node);
-      if (tnode->getText() == path) {
-        return tnode;
+      if (node->getText() == path) {
+        return node;
       }
     }
   }
-  Q_ASSERT(false);
+  Q_ASSERT_X(false, root->getText().c_str(), path.c_str());
   return nullptr;
 }
 
@@ -39,4 +40,28 @@ QGraphicsLineItem* Contributer::addAdjacentNode(Node* node) {
   auto ret = Node::addAdjacentNode(node);
   node->addNode(this);
   return ret;
+}
+
+
+void Contributer::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+  QColor red = QColor::fromRgb(255, 0, 0);
+  for (auto& leaf : m_leafs) {
+    QPen pen = leaf->pen();
+    pen.setColor(red);
+    leaf->setPen(pen);
+  }
+
+  Node::mousePressEvent(event);
+}
+
+void Contributer::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+  QColor black = QColor::fromRgb(0, 0, 0);
+  for (auto& leaf : m_leafs) {
+    QPen pen = leaf->pen();
+    pen.setColor(black);
+    leaf->setPen(pen);
+  }
+
+
+  Node::mouseReleaseEvent(event);
 }

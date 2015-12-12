@@ -6,7 +6,8 @@
 
 Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect /* = QRectF(0, 0, 100, 30)*/)
   : QGraphicsRectItem(rect),
-    m_scene(scene) {
+    m_scene(scene),
+    m_text_str(content){
   setFlag(QGraphicsItem::ItemIsMovable);
   setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
 

@@ -36,7 +36,7 @@ protected:
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
   std::set<Node*> m_nodes;
-  bool m_is_leaf;
+  std::string m_text_str;
 
 signals:
 

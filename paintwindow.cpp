@@ -4,6 +4,7 @@
 #include "leafnode.h"
 #include "graphicsviewzoom.h"
 #include "contributer.h"
+#include "macros.h"
 
 #include "CommitIterator.h"
 #include "Commit.h"
@@ -32,19 +33,19 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   ui->graphicsView_2->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView_2);
 
-  m_root = new TreeNode(m_scene, "/");
+  g_root = new TreeNode(m_scene, "/");
 
   std::vector<CommitX*> commits = m_repo->getAllCommitsX();
   for (const auto& commit : commits) {
     std::vector<FileStat> affectedfiles = commit->getFiles();
-    drawFiles(affectedfiles);
-    addUser(commit->getAuthor(), affectedfiles);
+    Contributer* user = addUser(commit->getAuthor(), affectedfiles);
+    drawFiles(user, affectedfiles);
   }
 
   connectUsers();
 
-  m_root->arrange<true>();
-  m_root->itemChange(Node::ItemPositionChange, m_root->pos());
+  g_root->arrange<true>();
+  g_root->itemChange(Node::ItemPositionChange, g_root->pos());
 }
 
 void PaintWindow::connectUsers() {
@@ -69,7 +70,7 @@ void PaintWindow::connectUsers() {
   }
 }
 
-void PaintWindow::drawFiles(const std::vector<FileStat>& affectedfiles) {
+void PaintWindow::drawFiles(Contributer* contrib, const std::vector<FileStat>& affectedfiles) {
   for (const FileStat& filestat : affectedfiles) {
     std::string file = filestat.filename;
     std::string rootpath;
@@ -77,15 +78,16 @@ void PaintWindow::drawFiles(const std::vector<FileStat>& affectedfiles) {
     splitFile(file, &rootpath, &filename);
 
     if (files.find(file) != files.end()) { // found
-      break;
+      continue;
     }
 
     auto node = new LeafNode(m_scene, filename);
     files[file] = node;
     if (rootpath == "/") {
-      m_root->addChildNode(node);
+      g_root->addChildNode(node);
+      contrib->addLeaf(node);
     } else {
-      createFoldersRecursively(rootpath, &folders, m_root);
+      createFoldersRecursively(rootpath, &folders, g_root);
       // now every subfolder should exist
       size_t last_slash = rootpath.find_last_of('/');
       std::string subfolder;
@@ -96,6 +98,7 @@ void PaintWindow::drawFiles(const std::vector<FileStat>& affectedfiles) {
       }
       Q_ASSERT_X(folders[subfolder] != nullptr, rootpath.c_str(), subfolder.c_str());
       (folders[subfolder])->addChildNode(node);
+      contrib->addLeaf(node);
     }
   }
 }
@@ -157,4 +160,6 @@ inline Contributer* PaintWindow::addUser(const std::string& author, const std::v
 PaintWindow::~PaintWindow()
 {
   delete ui;
+  delete g_root;
+  g_root = nullptr;
 }

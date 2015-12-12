@@ -22,6 +22,7 @@ SOURCES += main.cpp\
     graphicsviewzoom.cpp \
     treenode.cpp \
     contributer.cpp \
+    macros.cpp \
     leafnode.cpp
 
 HEADERS  += mainwindow.h \
