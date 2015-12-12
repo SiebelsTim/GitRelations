@@ -40,9 +40,14 @@ bool Contributer::hasFile(const std::string& file) const {
   return m_files.count(file);
 }
 
-QGraphicsLineItem* Contributer::addAdjacentNode(Node* node) {
+QGraphicsLineItem* Contributer::addAdjacentNode(Contributer* node) {
   auto ret = Node::addAdjacentNode(node);
+  if (ret == nullptr) return nullptr;
   node->addNode(this);
+
+  node->addContributer(this);
+  addContributer(node);
+
   return ret;
 }
 
@@ -55,6 +60,14 @@ int Contributer::calculateStrength(const Contributer& contrib) const {
   }
 
   return strength;
+}
+
+void Contributer::addContributer(Contributer* contrib) {
+  m_contributers.insert(contrib);
+}
+
+bool Contributer::containsContributer(Contributer* contrib) const {
+  return m_contributers.count(contrib);
 }
 
 

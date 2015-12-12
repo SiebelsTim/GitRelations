@@ -20,11 +20,12 @@ Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect
 
 
 QGraphicsLineItem* Node::addAdjacentNode(Node* node) {
-  if (containsChild(node) || node->containsChild(this)) return m_lines[node].first;
+  if (containsChild(node) || node->containsChild(this)) return nullptr;
   auto line = m_scene->addLine(0,0,0,0);
+
+  addNode(node);
   addLine(line, true, node);
   node->addLine(line, false, this);
-  addNode(node);
   return line;
 }
 

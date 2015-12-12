@@ -35,6 +35,7 @@ protected:
   std::map<Node*, std::pair<QGraphicsLineItem*, bool>> m_lines;
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
+  // Attention! This is not doubly linked due to arrange()
   std::set<Node*> m_nodes;
   std::string m_text_str;
 

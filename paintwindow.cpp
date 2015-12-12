@@ -49,23 +49,29 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
 }
 
 void PaintWindow::connectUsers() {
+  std::set<Contributer*> contribs;
   for (auto& file : files) {
     auto contributers = file.second->getContributers();
     for (Contributer* contributer : contributers) {
+      contribs.insert(contributer);
       for (Contributer* contributer2 : contributers) {
         if (contributer == contributer2) {
           continue;
         }
-
-        QGraphicsLineItem* line = contributer->addAdjacentNode(contributer2);
-        Q_ASSERT(line);
-        QPen pen = line->pen();
-        auto width = pen.width();
-        if (width < 10) {
-          pen.setWidth(width + 1);
-          line->setPen(pen);
-        }
+        contributer->addAdjacentNode(contributer2);
       }
+    }
+  }
+
+  int max = 0;
+  int min = INT_MAX;
+  // get max and min strength
+  for (Contributer* contrib : contribs) {
+    for (Contributer* contrib2 : contrib->getContributers()) {
+      Q_ASSERT(contrib2->containsContributer(contrib) && contrib->containsContributer(contrib2));
+      const auto strength = contrib->calculateStrength(*contrib2);
+      max = std::max(max, strength);
+      min = std::min(min, strength);
     }
   }
 }
