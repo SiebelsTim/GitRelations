@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QThread>
 #include <set>
 
 #include "FileStat.h"
@@ -15,7 +16,8 @@ class QGrapicsScene;
 class Repository;
 class TreeNode;
 class Contributer;
-class Signature;
+class LayoutThread;
+
 
 class PaintWindow : public QMainWindow
 {
@@ -45,6 +47,26 @@ private:
   std::map<std::string, TreeNode*> files;
 
   std::map<std::string, Contributer*> m_users;
+
+  LayoutThread* m_layout;
+
+public slots:
+  void setPos(Contributer* contrib, int x, int y);
+};
+
+
+
+class LayoutThread : public QThread {
+  PaintWindow* m_paintwindow;
+  std::set<Contributer*> m_contribs;
+public:
+  LayoutThread(PaintWindow* paintwindow, std::set<Contributer*> contribs):
+    QThread(), m_paintwindow(paintwindow), m_contribs(contribs){
+    Q_ASSERT(paintwindow);
+  }
+
+  virtual void run() override;
+
 };
 
 #endif // PAINTWINDOW_H

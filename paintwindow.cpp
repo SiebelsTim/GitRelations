@@ -5,6 +5,7 @@
 #include "graphicsviewzoom.h"
 #include "contributer.h"
 #include "macros.h"
+#include "forcelayout.h"
 
 #include "CommitIterator.h"
 #include "Commit.h"
@@ -70,24 +71,11 @@ void PaintWindow::connectUsers() {
     }
   }
 
-  QtConcurrent::run(this, &PaintWindow::calcStrengthLimits, contribs);
+  m_layout = new LayoutThread(this, contribs);
+  m_layout->start();
 
 }
 
-void PaintWindow::calcStrengthLimits(std::set<Contributer*> contribs) const {
-  int max = 0;
-  int min = INT_MAX;
-  // get max and min strength
-  for (Contributer* contrib : contribs) {
-    for (Contributer* contrib2 : contrib->getContributers()) {
-      Q_ASSERT(contrib2->containsContributer(contrib) && contrib->containsContributer(contrib2));
-      const auto strength = contrib->calculateStrength(*contrib2);
-      max = std::max(max, strength);
-      min = std::min(min, strength);
-    }
-  }
-  // TODO: emit to object
-}
 
 void PaintWindow::drawFiles(Contributer* contrib, const std::vector<FileStat>& affectedfiles) {
   for (const FileStat& filestat : affectedfiles) {
@@ -176,9 +164,43 @@ inline Contributer* PaintWindow::addUser(const std::string& author, const std::v
   return contrib;
 }
 
+
+void PaintWindow::setPos(Contributer *contrib, int x, int y) {
+  contrib->setPos(x, y);
+}
+
 PaintWindow::~PaintWindow()
 {
+  // We need terminate here because we may stuck in the library function
+  m_layout->terminate();
+  m_layout->wait();
   delete ui;
   delete g_root;
   g_root = nullptr;
+  delete m_layout;
 }
+
+void LayoutThread::run() {
+   ForceLayout layout(m_contribs);
+   connect(&layout, &ForceLayout::posChanged,
+           m_paintwindow, &PaintWindow::setPos);
+   layout.exportToFile("dot.dot");
+   qDebug() << "Exported";
+   layout.layout();
+   qDebug() << "layout finished";
+
+   return;
+
+   int max = 0;
+   int min = INT_MAX;
+   // get max and min strength
+   for (Contributer* contrib : m_contribs) {
+     for (Contributer* contrib2 : contrib->getContributers()) {
+       Q_ASSERT(contrib2->containsContributer(contrib) && contrib->containsContributer(contrib2));
+       const auto strength = contrib->calculateStrength(*contrib2);
+       max = std::max(max, strength);
+       min = std::min(min, strength);
+     }
+   }
+   // TODO: emit to object
+ }

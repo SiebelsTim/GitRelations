@@ -77,8 +77,7 @@ void Node::moveLines(QPointF newPos) {
 
 
 std::string Node::getText() const {
-  if (m_text == nullptr) return "";
-  return m_text->toPlainText().toStdString();
+  return m_text_str;
 }
 
 

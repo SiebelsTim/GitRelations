@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     treenode.cpp \
     contributer.cpp \
     macros.cpp \
-    leafnode.cpp
+    leafnode.cpp \
+    forcelayout.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
@@ -33,13 +34,14 @@ HEADERS  += mainwindow.h \
     treenode.h \
     contributer.h \
     macros.h \
-    leafnode.h
+    leafnode.h \
+    forcelayout.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \
     paintwindow.ui
 
-unix:!macx: LIBS += -L$$PWD -lgitcpp -lgit2
+unix:!macx: LIBS += -L$$PWD -lgitcpp -lgit2 -lcgraph -lgvc
 
 INCLUDEPATH += $$PWD/../libgitcpp/include
 DEPENDPATH += $$PWD/../libgitcpp/include
