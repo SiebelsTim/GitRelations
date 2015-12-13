@@ -39,6 +39,11 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   layoutMenu->addAction("sfdp", this, SLOT(layoutSfdp()));
   layoutMenu->addAction("twopi", this, SLOT(layoutTwopi()));
 
+  ui->userList->setSelectionMode(QAbstractItemView::MultiSelection);
+  connect(ui->userList->selectionModel(),
+        SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+        this, SLOT(userSelectionChanged()));
+
   m_scene = new QGraphicsScene(this);
   ui->graphicsView->setScene(m_scene);
   ui->graphicsView->setRenderHint(QPainter::Antialiasing);
@@ -183,6 +188,30 @@ void PaintWindow::setPos(Contributer *contrib, int x, int y) {
   contrib->setPos(x, y);
 }
 
+void PaintWindow::userSelectionChanged() {
+  QList<QListWidgetItem*> selected = ui->userList->selectedItems();
+
+  if (selected.empty()) { // make all visible
+    for (auto& contrib : m_users) {
+      contrib.second->setVisible(true);
+    }
+    return;
+  }
+
+  std::set<Contributer*> visible;
+  for (auto& item : selected) {
+    Contributer* contrib = static_cast<Contributer*>(item);
+    contrib->setVisible(true);
+    visible.insert(contrib);
+  }
+
+  for (auto& contributer : m_users) {
+    if (visible.count(contributer.second) == 0) {
+      contributer.second->setVisible(false);
+    }
+  }
+}
+
 
 void PaintWindow::layout(const char* algorithm) {
   std::set<Contributer*> contribs;
@@ -240,3 +269,4 @@ void LayoutThread::run() {
    }
    // TODO: emit to object
  }
+

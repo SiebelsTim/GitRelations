@@ -21,6 +21,8 @@ public:
   virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
 
+  virtual void setVisible(bool visible);
+
   virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
   virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 

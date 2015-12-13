@@ -80,6 +80,14 @@ std::string Node::getText() const {
   return m_text_str;
 }
 
+void Node::setVisible(bool visible) {
+  for (std::pair<Node* const, std::pair<QGraphicsLineItem*, bool>>& line : m_lines) {
+    line.second.first->setVisible(visible);
+  }
+  m_text->setVisible(visible);
+  QGraphicsRectItem::setVisible(visible);
+}
+
 
 void Node::mousePressEvent(QGraphicsSceneMouseEvent* event) {
   QColor red = QColor::fromRgb(255, 0, 0);

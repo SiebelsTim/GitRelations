@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QItemSelection>
 #include <QThread>
 #include <set>
 
@@ -17,6 +18,7 @@ class Repository;
 class TreeNode;
 class Contributer;
 class LayoutThread;
+class QListWidgetItem;
 
 
 class PaintWindow : public QMainWindow
@@ -88,6 +90,7 @@ public slots:
   }
 
   void setPos(Contributer* contrib, int x, int y);
+  void userSelectionChanged();
 };
 
 
