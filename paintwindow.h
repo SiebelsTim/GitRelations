@@ -91,11 +91,14 @@ public slots:
 
   void setPos(Contributer* contrib, int x, int y);
   void userSelectionChanged();
+  void relation(Contributer*, Contributer*, int strength);
 };
 
 
 
 class LayoutThread : public QThread {
+  Q_OBJECT
+
   const PaintWindow* m_paintwindow;
   std::set<Contributer*> m_contribs;
   const char* m_algo;
@@ -106,6 +109,9 @@ public:
   }
 
   virtual void run() override;
+
+signals:
+  void relation(Contributer*, Contributer*, int strength);
 
 };
 

@@ -75,6 +75,14 @@ void Node::moveLines(QPointF newPos) {
   }
 }
 
+QGraphicsLineItem* Node::getLine(Node* node) const {
+  if (m_lines.find(node) == m_lines.end()) {
+    return nullptr;
+  }
+
+  return m_lines.at(node).first;
+}
+
 
 std::string Node::getText() const {
   return m_text_str;

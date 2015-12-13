@@ -20,6 +20,7 @@ public:
   void addLine(QGraphicsLineItem *line, bool isPoint1, Node* node);
   virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
+  QGraphicsLineItem* getLine(Node* node) const;
 
   virtual void setVisible(bool visible);
 

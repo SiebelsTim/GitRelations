@@ -91,6 +91,8 @@ void PaintWindow::connectUsers() {
   }
 
   m_layout = new LayoutThread(this, contribs, "dot");
+  connect(m_layout, &LayoutThread::relation,
+          this, &PaintWindow::relation);
   m_layout->start();
 
 }
@@ -234,6 +236,18 @@ void PaintWindow::layout(const char* algorithm) {
   m_layout->start();
 }
 
+void PaintWindow::relation(Contributer* contrib1, Contributer* contrib2, int strength) {
+  QGraphicsLineItem* line = contrib1->getLine(contrib2);
+  Q_ASSERT(line != nullptr);
+  QPen pen = line->pen();
+  if (strength == 0) {
+    pen.setColor(QColor::fromRgbF(0, 0, 0, 0.5));
+  } else {
+    pen.setWidth(strength);
+  }
+  line->setPen(pen);
+}
+
 PaintWindow::~PaintWindow()
 {
   // We need terminate here because we may stuck in the library function
@@ -254,19 +268,30 @@ void LayoutThread::run() {
    layout.layout(m_algo);
    qDebug() << "layout finished";
 
-   return;
 
+   qDebug() << "Start strengh calculation";
    int max = 0;
    int min = INT_MAX;
+   std::map<std::pair<Contributer*, Contributer*>, int> strengths;
    // get max and min strength
    for (Contributer* contrib : m_contribs) {
      for (Contributer* contrib2 : contrib->getContributers()) {
        Q_ASSERT(contrib2->containsContributer(contrib) && contrib->containsContributer(contrib2));
        const auto strength = contrib->calculateStrength(*contrib2);
+       strengths[std::make_pair(contrib, contrib2)] = strength;
        max = std::max(max, strength);
        min = std::min(min, strength);
      }
    }
-   // TODO: emit to object
+
+   for (auto& relation : strengths) {
+     Contributer* contrib1 = relation.first.first;
+     Contributer* contrib2 = relation.first.second;
+     int strength = relation.second;
+     int normalized = (float)strength / max * 10;
+     emit this->relation(contrib1, contrib2, normalized);
+   }
+
+   qDebug() << "finished strength calculation";
  }
 
