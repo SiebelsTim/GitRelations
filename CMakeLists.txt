@@ -33,7 +33,7 @@ set (SRC_BIN main.cpp)
 qt5_wrap_cpp(MOC_H ${SRC_H})
 qt5_wrap_ui (MOC_UI  ${SRC_UI})
 
-add_library (GitRelationsLib SHARED 
+add_library (GitRelationsLib STATIC 
     ${SRC_C}
     ${MOC_H}
     ${MOC_UI}
