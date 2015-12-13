@@ -30,7 +30,11 @@ void ForceLayout::exportToFile(const std::string& filename) const {
   std::set<Contributer*> visited;
   for(Contributer* contrib : m_nodes) {
     visited.insert(contrib);
-    for (Contributer* contrib2 : contrib->getContributers()) {
+    auto contributers = contrib->getContributers();
+    if (contributers.size() == 0) { // has no connections
+      stream << '"' << contrib->getText() << "\"\n";
+    }
+    for (Contributer* contrib2 : contributers) {
       if (visited.count(contrib2)) continue;
       stream << '"' << contrib->getText() << "\" -- \"" << contrib2->getText() << "\"\n";
     }
@@ -61,7 +65,7 @@ void ForceLayout::layout(const char* algo) {
   for (Contributer* contrib : m_nodes) {
     const char* name = contrib->getText().c_str();
     node = agnode(G, const_cast<char*>(name), 0);
-    Q_ASSERT(node != nullptr);
+    Q_ASSERT_X(node != nullptr, "layout", name);
     std::string posstr = agget(node, const_cast<char*>("pos"));
     auto commapos = posstr.find_first_of(',');
     int x = atoi(posstr.substr(0, commapos).c_str());
