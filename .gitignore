@@ -8,4 +8,5 @@ moc_*
 ui_*.h
 
 libGitRelationsLib.so
+libGitRelationsLib.a
 git_relations
