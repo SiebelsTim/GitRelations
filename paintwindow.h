@@ -19,6 +19,7 @@ class TreeNode;
 class Contributer;
 class LayoutThread;
 class QListWidgetItem;
+class StrengthsThread;
 
 
 class PaintWindow : public QMainWindow
@@ -53,6 +54,7 @@ private:
   std::map<std::string, Contributer*> m_users;
 
   LayoutThread* m_layout;
+  StrengthsThread* m_strengths;
 
 public slots:
   inline void layoutDot() {
@@ -107,6 +109,18 @@ public:
     QThread(), m_paintwindow(paintwindow), m_contribs(contribs), m_algo(algorithm){
     Q_ASSERT(paintwindow);
   }
+
+  virtual void run() override;
+};
+
+class StrengthsThread : public QThread {
+  Q_OBJECT
+
+  std::set<Contributer*> m_contribs;
+  const char* m_algo;
+public:
+  StrengthsThread(std::set<Contributer*> contribs):
+    QThread(), m_contribs(contribs){}
 
   virtual void run() override;
 

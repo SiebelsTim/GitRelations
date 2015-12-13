@@ -101,6 +101,9 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent* event) {
   QColor red = QColor::fromRgb(255, 0, 0);
   for (auto& line : m_lines) {
     QPen pen = line.second.first->pen();
+    if (m_line_colors.find(line.second.first) == m_line_colors.end()) { // only set once, else dblclicks would set it to red
+      m_line_colors[line.second.first] = pen.color();
+    }
     pen.setColor(red);
     line.second.first->setPen(pen);
   }
@@ -109,10 +112,9 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-  QColor black = QColor::fromRgb(0, 0, 0);
   for (auto& line : m_lines) {
     QPen pen = line.second.first->pen();
-    pen.setColor(black);
+    pen.setColor(m_line_colors[line.second.first]);
     line.second.first->setPen(pen);
   }
 

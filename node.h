@@ -36,6 +36,9 @@ public:
 protected:
   // <Line, is_p1>
   std::map<Node*, std::pair<QGraphicsLineItem*, bool>> m_lines;
+  // Contains colors for m_lines, lazily filled in mousePressEvent
+  // We need this so we can reset from red when clicking a node
+  std::map<QGraphicsLineItem*, QColor> m_line_colors;
   QGraphicsTextItem* m_text;
   QGraphicsScene* m_scene;
   // Attention! This is not doubly linked due to arrange()

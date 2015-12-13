@@ -91,10 +91,12 @@ void PaintWindow::connectUsers() {
   }
 
   m_layout = new LayoutThread(this, contribs, "dot");
-  connect(m_layout, &LayoutThread::relation,
-          this, &PaintWindow::relation);
   m_layout->start();
 
+  m_strengths = new StrengthsThread(contribs);
+  connect(m_strengths, &StrengthsThread::relation,
+          this, &PaintWindow::relation);
+  m_strengths->start();
 }
 
 
@@ -253,10 +255,13 @@ PaintWindow::~PaintWindow()
   // We need terminate here because we may stuck in the library function
   m_layout->terminate();
   m_layout->wait();
+  m_strengths->wait();
   delete ui;
   delete g_root;
   g_root = nullptr;
   delete m_layout;
+  delete m_strengths;
+  m_strengths = nullptr;
 }
 
 void LayoutThread::run() {
@@ -267,31 +272,32 @@ void LayoutThread::run() {
    qDebug() << "Exported";
    layout.layout(m_algo);
    qDebug() << "layout finished";
+}
 
+void StrengthsThread::run() {
+    qDebug() << "Start strengh calculation";
+    int max = 0;
+    int min = INT_MAX;
+    std::map<std::pair<Contributer*, Contributer*>, int> strengths;
+    // get max and min strength
+    for (Contributer* contrib : m_contribs) {
+      for (Contributer* contrib2 : contrib->getContributers()) {
+        Q_ASSERT(contrib2->containsContributer(contrib) && contrib->containsContributer(contrib2));
+        const auto strength = contrib->calculateStrength(*contrib2);
+        strengths[std::make_pair(contrib, contrib2)] = strength;
+        max = std::max(max, strength);
+        min = std::min(min, strength);
+      }
+    }
 
-   qDebug() << "Start strengh calculation";
-   int max = 0;
-   int min = INT_MAX;
-   std::map<std::pair<Contributer*, Contributer*>, int> strengths;
-   // get max and min strength
-   for (Contributer* contrib : m_contribs) {
-     for (Contributer* contrib2 : contrib->getContributers()) {
-       Q_ASSERT(contrib2->containsContributer(contrib) && contrib->containsContributer(contrib2));
-       const auto strength = contrib->calculateStrength(*contrib2);
-       strengths[std::make_pair(contrib, contrib2)] = strength;
-       max = std::max(max, strength);
-       min = std::min(min, strength);
-     }
-   }
+    for (auto& relation : strengths) {
+      Contributer* contrib1 = relation.first.first;
+      Contributer* contrib2 = relation.first.second;
+      int strength = relation.second;
+      int normalized = (float)strength / max * 10;
+      emit this->relation(contrib1, contrib2, normalized);
+    }
 
-   for (auto& relation : strengths) {
-     Contributer* contrib1 = relation.first.first;
-     Contributer* contrib2 = relation.first.second;
-     int strength = relation.second;
-     int normalized = (float)strength / max * 10;
-     emit this->relation(contrib1, contrib2, normalized);
-   }
-
-   qDebug() << "finished strength calculation";
- }
+    qDebug() << "finished strength calculation";
+}
 
