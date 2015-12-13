@@ -17,6 +17,7 @@ class QGrapicsScene;
 class Repository;
 class TreeNode;
 class Contributer;
+class Tooltip;
 class LayoutThread;
 class QListWidgetItem;
 class StrengthsThread;
@@ -43,10 +44,15 @@ public:
 
   void layout(const char* algorithm);
 
+  inline Tooltip* getTooltip() const {
+    return m_tooltip;
+  }
+
 private:
   Ui::PaintWindow *ui;
   QGraphicsScene* m_scene;
   QGraphicsScene* m_scene2;
+  Tooltip* m_tooltip;
   const Repository* m_repo;
   std::map<std::string, TreeNode*> folders;
   std::map<std::string, TreeNode*> files;
@@ -92,6 +98,7 @@ public slots:
   }
 
   void setPos(Contributer* contrib, int x, int y);
+  void setCurrentContributer(Contributer* contrib);
   void userSelectionChanged();
   void relation(Contributer*, Contributer*, int strength);
 };

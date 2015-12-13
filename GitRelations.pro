@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     contributer.cpp \
     macros.cpp \
     leafnode.cpp \
-    forcelayout.cpp
+    forcelayout.cpp \
+    tooltip.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     contributer.h \
     macros.h \
     leafnode.h \
-    forcelayout.h
+    forcelayout.h \
+    tooltip.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \

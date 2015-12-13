@@ -2,6 +2,8 @@
 #include "treenode.h"
 #include "leafnode.h"
 #include "macros.h"
+#include "paintwindow.h"
+#include "tooltip.h"
 
 
 TreeNode* Contributer::findNodeByPath(const TreeNode* root, const std::string& path) const {
@@ -78,6 +80,10 @@ void Contributer::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     pen.setColor(red);
     leaf->setPen(pen);
   }
+
+  // Ugly.. QGraphicsItems are no qobjects
+  PaintWindow* paintwindow = static_cast<PaintWindow*>(m_scene->parent());
+  paintwindow->getTooltip()->setContributer(this);
 
   Node::mousePressEvent(event);
 }
