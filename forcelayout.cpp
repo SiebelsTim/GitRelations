@@ -29,13 +29,17 @@ void ForceLayout::exportToFile(const std::string& filename) const {
 
   std::set<Contributer*> visited;
   for(Contributer* contrib : m_nodes) {
+
+    if (!contrib->isVisible()) continue;
+
+    stream << '"' << contrib->getText() << "\"\n"; // this increases output size a lot,
+                                                   // but this way we assure every node is existing
     visited.insert(contrib);
     auto contributers = contrib->getContributers();
-    if (contributers.size() == 0) { // has no connections
-      stream << '"' << contrib->getText() << "\"\n";
-    }
     for (Contributer* contrib2 : contributers) {
-      if (visited.count(contrib2)) continue;
+
+      if (visited.count(contrib2) || !contrib2->isVisible()) continue;
+
       stream << '"' << contrib->getText() << "\" -- \"" << contrib2->getText() << "\"\n";
     }
   }
@@ -63,6 +67,7 @@ void ForceLayout::layout(const char* algo) {
 
   Agnode_t* node;
   for (Contributer* contrib : m_nodes) {
+    if (!contrib->isVisible()) continue;
     const char* name = contrib->getText().c_str();
     node = agnode(G, const_cast<char*>(name), 0);
     Q_ASSERT_X(node != nullptr, "layout", name);
