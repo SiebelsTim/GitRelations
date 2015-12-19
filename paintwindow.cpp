@@ -94,6 +94,8 @@ void PaintWindow::connectUsers() {
     }
   }
 
+  ui->userList->model()->sort(0);
+
   m_layout = new LayoutThread(this, contribs, "dot");
   m_layout->start();
 
