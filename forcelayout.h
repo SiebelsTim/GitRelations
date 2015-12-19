@@ -5,6 +5,7 @@
 #include <string>
 
 #include <QObject>
+#include <QPointF>
 
 class Contributer;
 
@@ -25,7 +26,7 @@ private:
   std::set<Contributer*> m_nodes;
 
 signals:
-  void posChanged(Contributer*, int x, int y);
+  void posChanged(Contributer*, QPointF pos);
 };
 
 #endif // FORCELAYOUT_H

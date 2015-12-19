@@ -97,7 +97,7 @@ public slots:
     layout("twopi");
   }
 
-  void setPos(Contributer* contrib, int x, int y);
+  void setPos(Contributer* contrib, QPointF pos);
   void setCurrentContributer(Contributer* contrib);
   void userSelectionChanged();
   void relation(Contributer*, Contributer*, int strength);

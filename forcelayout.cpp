@@ -75,7 +75,7 @@ void ForceLayout::layout(const char* algo) {
     auto commapos = posstr.find_first_of(',');
     int x = atoi(posstr.substr(0, commapos).c_str());
     int y = atoi(posstr.substr(commapos + 1).c_str());
-    emit posChanged(contrib, x, y);
+    emit posChanged(contrib, QPointF(x, y));
   }
 
 

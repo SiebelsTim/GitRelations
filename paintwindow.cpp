@@ -17,7 +17,8 @@
 #include "Signature.h"
 
 #include <QGraphicsItem>
-#include <QtConcurrent/QtConcurrent>
+#include <QGraphicsItemAnimation>
+#include <QTimeLine>
 #include <QDebug>
 
 PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
@@ -191,8 +192,22 @@ inline Contributer* PaintWindow::addUser(const std::string& author, const std::v
 }
 
 
-void PaintWindow::setPos(Contributer *contrib, int x, int y) {
-  contrib->setPos(x, y);
+void PaintWindow::setPos(Contributer *contrib, QPointF pos) {
+  // FIXME: Free?
+  QTimeLine* timer = new QTimeLine(2000);
+  timer->setFrameRange(0, 100);
+  QGraphicsItemAnimation* ani = new QGraphicsItemAnimation;
+  ani->setItem(contrib);
+  ani->setTimeLine(timer);
+
+  QPointF startPos = contrib->pos();
+  QPointF diff = pos - startPos;
+
+  for (int i = 0; i < 200; ++i) {
+    ani->setPosAt(i/200.0, QPointF(startPos.x() + i/200.0*diff.x(), startPos.y() + i/200.0*diff.y()));
+  }
+
+  timer->start();
 }
 
 void PaintWindow::setCurrentContributer(Contributer *contrib) {
