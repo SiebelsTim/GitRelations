@@ -1,4 +1,5 @@
 #include "graphicsviewzoom.h"
+#include "zoomgraphicsscene.h"
 #include <QMouseEvent>
 #include <QApplication>
 #include <QScrollBar>
@@ -15,6 +16,7 @@ GraphicsViewZoom::GraphicsViewZoom(QGraphicsView* view)
 
 void GraphicsViewZoom::gentle_zoom(double factor) {
   m_view->scale(factor, factor);
+  static_cast<ZoomGraphicsScene*>(m_view->scene())->setZoomFactor(factor); // This isn't supposed to be in scene, but we pass that around already....
   m_view->centerOn(m_target_scene_pos);
   QPointF delta_viewport_pos = m_target_viewport_pos - QPointF(m_view->viewport()->width() / 2.0,
                                                              m_view->viewport()->height() / 2.0);

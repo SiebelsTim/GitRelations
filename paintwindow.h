@@ -21,6 +21,7 @@ class Tooltip;
 class LayoutThread;
 class QListWidgetItem;
 class StrengthsThread;
+class ZoomGraphicsScene;
 
 
 class PaintWindow : public QMainWindow
@@ -50,8 +51,8 @@ public:
 
 private:
   Ui::PaintWindow *ui;
-  QGraphicsScene* m_scene;
-  QGraphicsScene* m_scene2;
+  ZoomGraphicsScene* m_scene;
+  ZoomGraphicsScene* m_scene2;
   Tooltip* m_tooltip;
   const Repository* m_repo;
   std::map<std::string, TreeNode*> folders;

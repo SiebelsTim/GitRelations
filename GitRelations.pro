@@ -37,7 +37,8 @@ HEADERS  += mainwindow.h \
     macros.h \
     leafnode.h \
     forcelayout.h \
-    tooltip.h
+    tooltip.h \
+    zoomgraphicsscene.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \

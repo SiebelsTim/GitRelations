@@ -11,7 +11,7 @@ class LeafNode;
 class TreeNode : public Node
 {
 public:
-  explicit TreeNode(QGraphicsScene* scene,
+  explicit TreeNode(ZoomGraphicsScene* scene,
                     const std::string& content,
                     const QRectF& rect = QRectF(0, 0, 100, 30))
     : Node(scene, content, rect){

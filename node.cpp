@@ -3,8 +3,9 @@
 #include <utility>
 #include <QPainter>
 #include "treenode.h"
+#include "zoomgraphicsscene.h"
 
-Node::Node(QGraphicsScene* scene, const std::string& content, const QRectF& rect /* = QRectF(0, 0, 100, 30)*/)
+Node::Node(ZoomGraphicsScene* scene, const std::string& content, const QRectF& rect /* = QRectF(0, 0, 100, 30)*/)
   : QGraphicsRectItem(rect),
     m_scene(scene),
     m_text_str(content){
@@ -86,6 +87,10 @@ QGraphicsLineItem* Node::getLine(Node* node) const {
 
 std::string Node::getText() const {
   return m_text_str;
+}
+
+ZoomGraphicsScene* Node::getScene() const {
+  return m_scene;
 }
 
 void Node::setVisible(bool visible) {

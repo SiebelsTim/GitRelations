@@ -4,6 +4,7 @@
 #include "macros.h"
 #include "paintwindow.h"
 #include "tooltip.h"
+#include "zoomgraphicsscene.h"
 
 
 TreeNode* Contributer::findNodeByPath(const TreeNode* root, const std::string& path) const {

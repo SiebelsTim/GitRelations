@@ -11,7 +11,7 @@ class Contributer : public Node, public QListWidgetItem
 {
 public:
 
-  explicit Contributer(QGraphicsScene* scene, const std::string& name): Node(scene, name), QListWidgetItem(name.c_str()) {}
+  explicit Contributer(ZoomGraphicsScene* scene, const std::string& name): Node(scene, name), QListWidgetItem(name.c_str()) {}
 
   TreeNode* findNodeByPath(const TreeNode* root, const std::string& path) const;
   QGraphicsLineItem* addAdjacentNode(Node* node) = delete;

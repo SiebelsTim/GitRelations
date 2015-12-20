@@ -8,7 +8,7 @@ class QPainter;
 class LeafNode : public TreeNode
 {
 public:
-  explicit LeafNode(QGraphicsScene* scene,
+  explicit LeafNode(ZoomGraphicsScene* scene,
                     const std::string& content,
                     const QRectF& rect = QRectF(0, 0, 30, 30))
     : TreeNode(scene, content, rect){

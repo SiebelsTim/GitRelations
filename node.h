@@ -7,10 +7,12 @@
 
 #include <set>
 
+class ZoomGraphicsScene;
+
 class Node : public QGraphicsRectItem
 {
 public:
-  explicit Node(QGraphicsScene* scene,
+  explicit Node(ZoomGraphicsScene* scene,
                 const std::string& content,
                 const QRectF& rect = QRectF(0, 0, 100, 30));
 
@@ -21,6 +23,7 @@ public:
   virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
   void moveLines(QPointF newPos);
   QGraphicsLineItem* getLine(Node* node) const;
+  ZoomGraphicsScene* getScene() const;
 
   virtual void setVisible(bool visible);
 
@@ -40,14 +43,10 @@ protected:
   // We need this so we can reset from red when clicking a node
   std::map<QGraphicsLineItem*, QColor> m_line_colors;
   QGraphicsTextItem* m_text;
-  QGraphicsScene* m_scene;
+  ZoomGraphicsScene* m_scene;
   // Attention! This is not doubly linked due to arrange()
   std::set<Node*> m_nodes;
   std::string m_text_str;
-
-signals:
-
-public slots:
 
 };
 

@@ -7,6 +7,7 @@
 #include "macros.h"
 #include "forcelayout.h"
 #include "tooltip.h"
+#include "zoomgraphicsscene.h"
 
 #include "CommitIterator.h"
 #include "Commit.h"
@@ -46,12 +47,12 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
         SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
         this, SLOT(userSelectionChanged()));
 
-  m_scene = new QGraphicsScene(this);
+  m_scene = new ZoomGraphicsScene(this);
   ui->graphicsView->setScene(m_scene);
   ui->graphicsView->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView);
 
-  m_scene2 = new QGraphicsScene(this);
+  m_scene2 = new ZoomGraphicsScene(this);
   ui->graphicsView_2->setScene(m_scene2);
   ui->graphicsView_2->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView_2);
