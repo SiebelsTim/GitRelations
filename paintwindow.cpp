@@ -327,7 +327,7 @@ void LayoutThread::run() {
    ForceLayout layout(m_contribs);
    connect(&layout, &ForceLayout::posChanged,
            m_paintwindow, &PaintWindow::setPos);
-   layout.exportToFile("dot.dot");
+   layout.exportToFile("export.dot");
    qDebug() << "Exported";
    layout.layout(m_algo);
    qDebug() << "layout finished";

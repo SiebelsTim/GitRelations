@@ -57,7 +57,7 @@ void ForceLayout::layout(const char* algo) {
   Agraph_t* G;
   GVC_t* gvc = gvContext();
 
-  FILE* fp = fopen("dot.dot", "r");
+  FILE* fp = fopen("export.dot", "r");
   G = agread(fp, 0);
 
   gvLayout(gvc, G, algo);
