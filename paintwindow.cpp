@@ -29,23 +29,13 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
 {
   ui->setupUi(this);
 
-  QMenu* layoutMenu = ui->menubar->addMenu("Layout");
-  layoutMenu->addAction("dot", this, SLOT(layoutDot()));
-  layoutMenu->addAction("circo", this, SLOT(layoutCirco()));
-  layoutMenu->addAction("fdp", this, SLOT(layoutFdp()));
-  layoutMenu->addAction("neato", this, SLOT(layoutNeato()));
-  layoutMenu->addAction("nop", this, SLOT(layoutNop()));
-  layoutMenu->addAction("nop1", this, SLOT(layoutNop1()));
-  layoutMenu->addAction("nop2", this, SLOT(layoutNop2()));
-  layoutMenu->addAction("osage", this, SLOT(layoutOsage()));
-  layoutMenu->addAction("patchwork", this, SLOT(layoutPatchwork()));
-  layoutMenu->addAction("sfdp", this, SLOT(layoutSfdp()));
-  layoutMenu->addAction("twopi", this, SLOT(layoutTwopi()));
+  initMenu();
 
   ui->userList->setSelectionMode(QAbstractItemView::MultiSelection);
   connect(ui->userList->selectionModel(),
         SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
         this, SLOT(userSelectionChanged()));
+
 
   m_scene = new ZoomGraphicsScene(this);
   ui->graphicsView->setScene(m_scene);
@@ -79,6 +69,50 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   }
   commits.clear();
 }
+
+
+void PaintWindow::initMenu() {
+  // Layout
+  QMenu* layoutMenu = ui->menubar->addMenu("Layout");
+  layoutMenu->addAction("dot", this, SLOT(layoutDot()));
+  layoutMenu->addAction("circo", this, SLOT(layoutCirco()));
+  layoutMenu->addAction("fdp", this, SLOT(layoutFdp()));
+  layoutMenu->addAction("neato", this, SLOT(layoutNeato()));
+  layoutMenu->addAction("nop", this, SLOT(layoutNop()));
+  layoutMenu->addAction("nop1", this, SLOT(layoutNop1()));
+  layoutMenu->addAction("nop2", this, SLOT(layoutNop2()));
+  layoutMenu->addAction("osage", this, SLOT(layoutOsage()));
+  layoutMenu->addAction("patchwork", this, SLOT(layoutPatchwork()));
+  layoutMenu->addAction("sfdp", this, SLOT(layoutSfdp()));
+  layoutMenu->addAction("twopi", this, SLOT(layoutTwopi()));
+
+
+  // Toggle views
+  QMenu* focusMenu = ui->menubar->addMenu("Display");
+  auto contributersAction = new QAction("&Contributers", focusMenu);
+  connect(contributersAction, &QAction::toggled,
+          this, &PaintWindow::clickContributers);
+  contributersAction->setCheckable(true);
+  contributersAction->setChecked(true);
+  focusMenu->addAction(contributersAction);
+
+  auto filesAction = new QAction("&Files", focusMenu);
+  connect(filesAction, &QAction::toggled,
+          this, &PaintWindow::clickFiles);
+  filesAction->setCheckable(true);
+  filesAction->setChecked(true);
+  focusMenu->addAction(filesAction);
+}
+
+void PaintWindow::clickContributers(bool checked) {
+  ui->graphicsView_2->setVisible(checked);
+  ui->userList->setVisible(checked);
+}
+
+void PaintWindow::clickFiles(bool checked) {
+  ui->graphicsView->setVisible(checked);
+}
+
 
 void PaintWindow::connectUsers() {
   std::set<Contributer*> contribs;

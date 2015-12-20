@@ -50,6 +50,8 @@ public:
   }
 
 private:
+  void initMenu();
+private:
   Ui::PaintWindow *ui;
   ZoomGraphicsScene* m_scene;
   ZoomGraphicsScene* m_scene2;
@@ -102,6 +104,9 @@ public slots:
   void setCurrentContributer(Contributer* contrib);
   void userSelectionChanged();
   void relation(Contributer*, Contributer*, int strength);
+
+  void clickContributers(bool checked);
+  void clickFiles(bool checked);
 };
 
 
