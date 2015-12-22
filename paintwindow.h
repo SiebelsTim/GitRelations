@@ -22,6 +22,7 @@ class LayoutThread;
 class QListWidgetItem;
 class StrengthsThread;
 class ZoomGraphicsScene;
+class ContributerWindow;
 
 
 class PaintWindow : public QMainWindow
@@ -45,9 +46,6 @@ public:
 
   void layout(const char* algorithm);
 
-  inline Tooltip* getTooltip() const {
-    return m_tooltip;
-  }
 
 private:
   void initMenu();
@@ -55,8 +53,9 @@ private:
   Ui::PaintWindow *ui;
   ZoomGraphicsScene* m_scene;
   ZoomGraphicsScene* m_scene2;
-  Tooltip* m_tooltip;
   const Repository* m_repo;
+  ContributerWindow* m_contribwindow = nullptr;
+
   std::map<std::string, TreeNode*> folders;
   std::map<std::string, TreeNode*> files;
 
@@ -101,12 +100,13 @@ public slots:
   }
 
   void setPos(Contributer* contrib, QPointF pos);
-  void setCurrentContributer(Contributer* contrib);
   void userSelectionChanged();
   void relation(Contributer*, Contributer*, int strength);
 
   void clickContributers(bool checked);
   void clickFiles(bool checked);
+private slots:
+  void on_userList_doubleClicked(const QModelIndex &index);
 };
 
 

@@ -82,10 +82,6 @@ void Contributer::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     leaf->setPen(pen);
   }
 
-  // Ugly.. QGraphicsItems are no qobjects
-  PaintWindow* paintwindow = static_cast<PaintWindow*>(m_scene->parent());
-  paintwindow->getTooltip()->setContributer(this);
-
   Node::mousePressEvent(event);
 }
 
@@ -96,7 +92,6 @@ void Contributer::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     pen.setColor(black);
     leaf->setPen(pen);
   }
-
 
   Node::mouseReleaseEvent(event);
 }

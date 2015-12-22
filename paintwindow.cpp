@@ -6,8 +6,8 @@
 #include "contributer.h"
 #include "macros.h"
 #include "forcelayout.h"
-#include "tooltip.h"
 #include "zoomgraphicsscene.h"
+#include "contributerwindow.h"
 
 #include "CommitIterator.h"
 #include "Commit.h"
@@ -46,8 +46,6 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   ui->graphicsView_2->setScene(m_scene2);
   ui->graphicsView_2->setRenderHint(QPainter::Antialiasing);
   new GraphicsViewZoom(ui->graphicsView_2);
-  m_tooltip = new Tooltip;
-  m_scene2->addItem(m_tooltip);
 
   g_root = new TreeNode(m_scene, "/");
 
@@ -247,10 +245,6 @@ void PaintWindow::setPos(Contributer *contrib, QPointF pos) {
   timer->start();
 }
 
-void PaintWindow::setCurrentContributer(Contributer *contrib) {
-  m_tooltip->setContributer(contrib);
-}
-
 void PaintWindow::userSelectionChanged() {
   QList<QListWidgetItem*> selected = ui->userList->selectedItems();
 
@@ -360,3 +354,14 @@ void StrengthsThread::run() {
     qDebug() << "finished strength calculation";
 }
 
+
+void PaintWindow::on_userList_doubleClicked(const QModelIndex &index)
+{
+  Contributer* contrib = static_cast<Contributer*>(ui->userList->item(index.row()));
+  if (m_contribwindow == nullptr) {
+    m_contribwindow = new ContributerWindow(contrib, this);
+  } else {
+    m_contribwindow->setContributer(contrib);
+  }
+  m_contribwindow->show();
+}

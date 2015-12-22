@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     macros.cpp \
     leafnode.cpp \
     forcelayout.cpp \
-    tooltip.cpp
+    tooltip.cpp \
+    contributerwindow.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
@@ -38,11 +39,13 @@ HEADERS  += mainwindow.h \
     leafnode.h \
     forcelayout.h \
     tooltip.h \
-    zoomgraphicsscene.h
+    zoomgraphicsscene.h \
+    contributerwindow.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \
-    paintwindow.ui
+    paintwindow.ui \
+    contributerwindow.ui
 
 unix:!macx: LIBS += -L$$PWD -lgitcpp -lgit2 -lcgraph -lgvc
 
