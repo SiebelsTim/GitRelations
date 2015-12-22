@@ -107,6 +107,7 @@ public slots:
   void clickFiles(bool checked);
 private slots:
   void on_userList_doubleClicked(const QModelIndex &index);
+  void on_userListCheckbox_stateChanged(int arg1);
 };
 
 

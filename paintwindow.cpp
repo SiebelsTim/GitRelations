@@ -105,6 +105,7 @@ void PaintWindow::initMenu() {
 void PaintWindow::clickContributers(bool checked) {
   ui->graphicsView_2->setVisible(checked);
   ui->userList->setVisible(checked);
+  ui->userListCheckbox->setVisible(checked);
 }
 
 void PaintWindow::clickFiles(bool checked) {
@@ -258,8 +259,19 @@ void PaintWindow::userSelectionChanged() {
   std::set<Contributer*> visible;
   for (auto& item : selected) {
     Contributer* contrib = static_cast<Contributer*>(item);
+    if (visible.count(contrib) > 0) {
+      continue;
+    }
+
     contrib->setVisible(true);
     visible.insert(contrib);
+    // contributers and adjacent contributers if checkbox checked
+    if (!ui->userListCheckbox->isChecked()) {
+      for (auto& contributer : contrib->getContributers()) {
+        visible.insert(contributer);
+        contributer->setVisible(true);
+      }
+    }
   }
 
   for (auto& contributer : m_users) {
@@ -364,4 +376,9 @@ void PaintWindow::on_userList_doubleClicked(const QModelIndex &index)
     m_contribwindow->setContributer(contrib);
   }
   m_contribwindow->show();
+}
+
+void PaintWindow::on_userListCheckbox_stateChanged(int)
+{
+    userSelectionChanged();
 }
