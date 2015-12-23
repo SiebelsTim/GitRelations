@@ -22,8 +22,10 @@ public:
 
   void load();
   void loadPlot();
+  void loadCommitsInTimespan();
+  void loadCommitsPerHourOfDay();
   void setContributer(Contributer* contrib);
-  bool commitBelongsToContributer(const Commit& commit);
+  bool commitBelongsToContributer(const Commit& commit) const;
 
 private slots:
   void on_tabWidget_currentChanged(int index);

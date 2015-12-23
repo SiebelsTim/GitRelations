@@ -60,6 +60,55 @@ void ContributerWindow::load() {
 }
 
 void ContributerWindow::loadPlot() {
+  loadCommitsInTimespan();
+}
+
+void ContributerWindow::loadCommitsInTimespan() {
+  ui->headline->setText("Commits");
+
+  QMap<double, double> values;
+
+  for (const auto& commit : m_repo->iter()) {
+    if (!commitBelongsToContributer(commit)) continue;
+
+    time_t time = commit.time();
+    tm* tm = gmtime(&time);
+    // Get only full day
+    tm->tm_hour = 0;
+    tm->tm_min = 0;
+    tm->tm_sec = 0;
+    time_t date = mktime(tm);
+    values[date]++;
+  }
+
+  // Set day before and after to 0 if not existing
+  for (auto& key : values.keys()) {
+    if (!values.contains(key + 60*60*24)) {
+      values[key + 60*60*24] = 0;
+    }
+    if (!values.contains(key - 60*60*24)) {
+      values[key - 60*60*24] = 0;
+    }
+  }
+
+  ui->plot->clearGraphs();
+  ui->plot->addGraph();
+  ui->plot->graph(0)->setData(
+        values.keys().toVector(), values.values().toVector());
+  ui->plot->rescaleAxes();
+  ui->plot->xAxis->setLabel("Time");
+  ui->plot->yAxis->setLabel("Commit count");
+  ui->plot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
+  ui->plot->xAxis->setDateTimeFormat("MMMM\nyyyy");
+  ui->plot->xAxis->setTickLabelFont(QFont(QFont().family(), 8));
+  ui->plot->yAxis->setTickLabelFont(QFont(QFont().family(), 8));
+  ui->plot->graph(0)->setBrush(QBrush(QColor::fromRgbF(0.3, 0.3, 1.0, 0.5)));
+  ui->plot->replot();
+}
+
+void ContributerWindow::loadCommitsPerHourOfDay() {
+  ui->headline->setText("Commits by hour of day");
+
   QMap<double, double> values;
   // Insert 0 for every hour, so we can see spikes
   for (int i = 0; i < 24; ++i) {
@@ -73,6 +122,7 @@ void ContributerWindow::loadPlot() {
     tm* tm = gmtime(&time);
     values[tm->tm_hour]++;
   }
+
   ui->plot->clearGraphs();
   ui->plot->addGraph();
   ui->plot->graph(0)->setData(
@@ -84,7 +134,7 @@ void ContributerWindow::loadPlot() {
   ui->plot->replot();
 }
 
-bool ContributerWindow::commitBelongsToContributer(const Commit& commit) {
+bool ContributerWindow::commitBelongsToContributer(const Commit& commit) const {
   return commit.author().name() == m_contrib->getName();
 }
 
