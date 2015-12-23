@@ -30,6 +30,8 @@ public:
 private slots:
   void on_tabWidget_currentChanged(int index);
 
+  void on_comboBox_currentIndexChanged(int index);
+
 private:
   Ui::ContributerWindow *ui;
   Contributer* m_contrib;

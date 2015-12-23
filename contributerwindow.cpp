@@ -59,9 +59,6 @@ void ContributerWindow::load() {
   ui->tableWidget->resizeColumnsToContents();
 }
 
-void ContributerWindow::loadPlot() {
-  loadCommitsInTimespan();
-}
 
 void ContributerWindow::loadCommitsInTimespan() {
   ui->headline->setText("Commits");
@@ -131,6 +128,7 @@ void ContributerWindow::loadCommitsPerHourOfDay() {
   ui->plot->xAxis->setRange(0, 23);
   ui->plot->xAxis->setLabel("Hour of day");
   ui->plot->yAxis->setLabel("Commit count");
+  ui->plot->graph(0)->setBrush(QBrush(QColor::fromRgbF(0.3, 0.3, 1.0, 0.5)));
   ui->plot->replot();
 }
 
@@ -144,7 +142,7 @@ void ContributerWindow::setContributer(Contributer* contrib) {
   ui->tableWidget->setRowCount(0); // This empties the table
   load();
   if (ui->tabWidget->currentIndex() == 1) {
-    loadPlot();
+    on_comboBox_currentIndexChanged(ui->comboBox->currentIndex());
   }
 }
 
@@ -156,6 +154,18 @@ ContributerWindow::~ContributerWindow()
 void ContributerWindow::on_tabWidget_currentChanged(int index)
 {
   if (index == 1) {
-    loadPlot();
+    on_comboBox_currentIndexChanged(ui->comboBox->currentIndex());
   }
+}
+
+void ContributerWindow::on_comboBox_currentIndexChanged(int index)
+{
+    switch (index) {
+    case 0:
+      loadCommitsInTimespan();
+      break;
+    case 1:
+      loadCommitsPerHourOfDay();
+      break;
+    }
 }

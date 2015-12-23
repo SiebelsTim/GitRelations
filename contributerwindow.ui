@@ -68,6 +68,29 @@
          </widget>
         </item>
         <item>
+         <widget class="QComboBox" name="comboBox">
+          <property name="editable">
+           <bool>false</bool>
+          </property>
+          <property name="currentText">
+           <string>Commits</string>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Commits</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Commits by hour of day</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
          <widget class="QCustomPlot" name="plot" native="true"/>
         </item>
        </layout>
