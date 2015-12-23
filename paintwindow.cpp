@@ -28,6 +28,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
   m_repo(repo)
 {
   ui->setupUi(this);
+  setWindowTitle(m_repo->getName().c_str());
 
   initMenu();
 

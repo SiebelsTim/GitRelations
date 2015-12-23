@@ -73,6 +73,7 @@ void ContributerWindow::loadPlot() {
     tm* tm = gmtime(&time);
     values[tm->tm_hour]++;
   }
+  ui->plot->clearGraphs();
   ui->plot->addGraph();
   ui->plot->graph(0)->setData(
         values.keys().toVector(), values.values().toVector());

@@ -16,6 +16,7 @@ RepositoryWidget::RepositoryWidget(const Repository* repo, QWidget *parent) :
 {
   Q_ASSERT(repo);
   ui->setupUi(this);
+  setWindowTitle(m_repo->getName().c_str());
   loadFacts();
 }
 
