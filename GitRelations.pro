@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     leafnode.cpp \
     forcelayout.cpp \
     tooltip.cpp \
-    contributerwindow.cpp
+    contributerwindow.cpp \
+    qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
     repositorywidget.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     forcelayout.h \
     tooltip.h \
     zoomgraphicsscene.h \
-    contributerwindow.h
+    contributerwindow.h \
+    qcustomplot.h
 
 FORMS    += mainwindow.ui \
     repositorywidget.ui \

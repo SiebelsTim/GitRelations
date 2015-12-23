@@ -371,7 +371,7 @@ void PaintWindow::on_userList_doubleClicked(const QModelIndex &index)
 {
   Contributer* contrib = static_cast<Contributer*>(ui->userList->item(index.row()));
   if (m_contribwindow == nullptr) {
-    m_contribwindow = new ContributerWindow(contrib, this);
+    m_contribwindow = new ContributerWindow(contrib, m_repo, this);
   } else {
     m_contribwindow->setContributer(contrib);
   }
