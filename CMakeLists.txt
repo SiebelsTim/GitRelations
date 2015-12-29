@@ -19,9 +19,8 @@ add_definitions(-DHAVE_STRING_H)
 find_package(Qt5 REQUIRED COMPONENTS Widgets PrintSupport)
 find_package(Libgit2 REQUIRED)
 find_package(Graphviz REQUIRED)
+find_package(Libgitcpp REQUIRED)
 
-# TODO: Do a find_package
-include_directories(/home/tim/Projects/libgitcpp/include ${LIBGIT2_INCLUDE_DIR})
 link_directories(${CMAKE_SOURCE_DIR} ${lib_graphviz})
 
 
