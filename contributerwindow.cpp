@@ -128,6 +128,8 @@ void ContributerWindow::loadCommitsPerHourOfDay() {
   ui->plot->xAxis->setRange(0, 23);
   ui->plot->xAxis->setLabel("Hour of day");
   ui->plot->yAxis->setLabel("Commit count");
+  ui->plot->xAxis->setTickLabelType(QCPAxis::ltNumber);
+  ui->plot->xAxis->setTickStep(1.0);
   ui->plot->graph(0)->setBrush(QBrush(QColor::fromRgbF(0.3, 0.3, 1.0, 0.5)));
   ui->plot->replot();
 }
