@@ -342,14 +342,18 @@ void LayoutThread::run() {
 
 void StrengthsThread::run() {
     qDebug() << "Start strengh calculation";
+    auto start = clock();
     int max = 0;
     int min = INT_MAX;
     std::map<std::pair<Contributer*, Contributer*>, int> strengths;
     // get max and min strength
     for (Contributer* contrib : m_contribs) {
       for (Contributer* contrib2 : contrib->getContributers()) {
+        // Don't calculate strengths twice for a relation
+        // using the strengths map is slightly faster than using an additional set
+        if (strengths.count(std::make_pair(contrib2, contrib))) continue;
         Q_ASSERT(contrib2->containsContributer(contrib) && contrib->containsContributer(contrib2));
-        const auto strength = contrib->calculateStrength(*contrib2);
+        const auto strength = contrib->calculateStrength(*contrib2); // Expensive!
         strengths[std::make_pair(contrib, contrib2)] = strength;
         max = std::max(max, strength);
         min = std::min(min, strength);
@@ -365,6 +369,7 @@ void StrengthsThread::run() {
     }
 
     qDebug() << "finished strength calculation";
+    qDebug() << "finished after " << clock() - start ;
 }
 
 
