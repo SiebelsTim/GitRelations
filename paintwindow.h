@@ -24,44 +24,110 @@ class StrengthsThread;
 class ZoomGraphicsScene;
 class ContributerWindow;
 
-
+/**
+ * @brief The PaintWindow class displays the graphs
+ */
 class PaintWindow : public QMainWindow
 {
   Q_OBJECT
 
 public:
+  /**
+   * @brief creates the graphs window
+   * @param parent i.e. RepositoryWidget
+   * @param repo Repository to display data for. Never null
+   */
   explicit PaintWindow(QWidget *parent, const Repository* repo);
   ~PaintWindow();
 
+  /**
+   * @brief splits a filename into root folder and rest
+   * @param file file to split
+   * @param root Sets the value this pointer points to to the root folder
+   * @param filename sets the value this pointer points to to the rest of the filename
+   */
   void splitFile(const std::string& file, std::string* root, std::string* filename) const;
+  /**
+   * @brief creates TreeNodes recursively for a given path
+   * @param rootdir a directory to create all subfolders to
+   * @param folders Is filled with added folders
+   * @param rootnode root node to search root dir's node for
+   */
   void createFoldersRecursively(const std::string& rootdir,
                                 std::map<std::string, TreeNode*>* folders,
                                 TreeNode* rootnode);
 
+  /**
+   * @brief Adds and draws all files for a commits by a contributer
+   *
+   * Checks if files already exist
+   * @param contrib Contributer who affected the files
+   * @param affectedFiles the files
+   */
   void drawFiles(Contributer* contrib, const std::vector<FileStat>& affectedFiles);
+  /**
+   * @brief Adds a relation to all contributers
+   */
   void connectUsers();
+  /**
+   * @brief adds a user to the Contributers Scene
+   * @param author name
+   * @param files affected files
+   * @return created Contributer.
+   */
   Contributer* addUser(const std::string& author, const std::vector<FileStat>& files);
 
-  void calcStrengthLimits(std::set<Contributer*>) const;
-
+  /**
+   * @brief layouts the contributers by a given algorithm
+   *
+   * libgraphviz does this for us :)
+   * @param algorithm See LayoutThread for possible values
+   */
   void layout(const char* algorithm);
 
 
 private:
+  /**
+   * @brief Adds menuentries
+   */
   void initMenu();
 private:
   Ui::PaintWindow *ui;
+  /**
+   * @brief file scene
+   */
   ZoomGraphicsScene* m_scene;
+  /**
+   * @brief contributer scene
+   */
   ZoomGraphicsScene* m_scene2;
   const Repository* m_repo;
+  /**
+   * @brief ContributerWindow to reuse
+   */
   ContributerWindow* m_contribwindow = nullptr;
 
+  /**
+   * @brief path to TreeNode mapping for folders
+   */
   std::map<std::string, TreeNode*> folders;
+  /**
+   * @brief path to TreeNode mapping for files
+   */
   std::map<std::string, TreeNode*> files;
 
+  /**
+   * @brief name to Contributer node mapping
+   */
   std::map<std::string, Contributer*> m_users;
 
+  /**
+   * @brief Thread layouting contributers
+   */
   LayoutThread* m_layout;
+  /**
+   * @brief Thread calculating strengths
+   */
   StrengthsThread* m_strengths;
 
 public slots:
@@ -99,19 +165,50 @@ public slots:
     layout("twopi");
   }
 
+  /**
+   * @brief sets and animates a positionchange for a contributer
+   * @param contrib Contributer
+   * @param pos new position
+   */
   void setPos(Contributer* contrib, QPointF pos);
+  /**
+   * @brief Selection of list changed. Display appropriate contributers only.
+   */
   void userSelectionChanged();
+  /**
+   * @brief Changes the strengths of a relation
+   * @param strength new strength
+   */
   void relation(Contributer*, Contributer*, int strength);
 
+  /**
+   * @brief displays contributersscene if checked
+   * @param checked
+   */
   void clickContributers(bool checked);
+  /**
+   * @brief displays filescene if checked
+   * @param checked
+   */
   void clickFiles(bool checked);
 private slots:
+  /**
+   * @brief opens ContributerWindow
+   * @param index index clicked
+   */
   void on_userList_doubleClicked(const QModelIndex &index);
-  void on_userListCheckbox_stateChanged(int arg1);
+  /**
+   * @brief Toggles display contributers only vs contributers and related contributers
+   */
+  void on_userListCheckbox_stateChanged(int);
 };
 
 
-
+/**
+ * @brief Thread that does layouting and sends signals to PaintWindow
+ *
+ * Uses ForceLayout internally
+ */
 class LayoutThread : public QThread {
   Q_OBJECT
 
@@ -127,6 +224,9 @@ public:
   virtual void run() override;
 };
 
+/**
+ * @brief Calculates strengths and sends signals to PaintWindow
+ */
 class StrengthsThread : public QThread {
   Q_OBJECT
 
@@ -139,6 +239,10 @@ public:
   virtual void run() override;
 
 signals:
+  /**
+   * @brief relation strength changed
+   * @param strength new strength
+   */
   void relation(Contributer*, Contributer*, int strength);
 
 };
