@@ -37,6 +37,8 @@ public:
    * @brief frees the Repository
    */
   ~RepositoryWidget();
+
+protected:
   /**
    * @brief loads an display very small facts about this repository
    */

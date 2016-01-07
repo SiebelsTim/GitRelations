@@ -51,10 +51,6 @@ public:
    */
   bool containsContributer(Contributer* contrib) const;
 
-  // TODO: check if this is working via Node class
-  virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-
   /**
    * @brief Returns the name of the contributer
    *
@@ -115,6 +111,18 @@ public:
    * @return strength
    */
   int calculateStrength(const Contributer& contrib) const;
+
+protected:
+  /**
+   * @brief highlights all leafnodes
+   * @param event
+   */
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+  /**
+   * @brief resets highlight of leafnodes
+   * @param event
+   */
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
 private:
   /**

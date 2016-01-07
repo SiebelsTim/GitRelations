@@ -30,6 +30,7 @@ public:
     m_text->setVisible(false);
   }
 
+protected:
 
   /**
    * @brief Displays the content string

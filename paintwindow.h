@@ -41,23 +41,6 @@ public:
   ~PaintWindow();
 
   /**
-   * @brief splits a filename into root folder and rest
-   * @param file file to split
-   * @param root Sets the value this pointer points to to the root folder
-   * @param filename sets the value this pointer points to to the rest of the filename
-   */
-  void splitFile(const std::string& file, std::string* root, std::string* filename) const;
-  /**
-   * @brief creates TreeNodes recursively for a given path
-   * @param rootdir a directory to create all subfolders to
-   * @param folders Is filled with added folders
-   * @param rootnode root node to search root dir's node for
-   */
-  void createFoldersRecursively(const std::string& rootdir,
-                                std::map<std::string, TreeNode*>* folders,
-                                TreeNode* rootnode);
-
-  /**
    * @brief Adds and draws all files for a commits by a contributer
    *
    * Checks if files already exist
@@ -85,6 +68,24 @@ public:
    */
   void layout(const char* algorithm);
 
+protected:
+
+  /**
+   * @brief splits a filename into root folder and rest
+   * @param file file to split
+   * @param root Sets the value this pointer points to to the root folder
+   * @param filename sets the value this pointer points to to the rest of the filename
+   */
+  void splitFile(const std::string& file, std::string* root, std::string* filename) const;
+  /**
+   * @brief creates TreeNodes recursively for a given path
+   * @param rootdir a directory to create all subfolders to
+   * @param folders Is filled with added folders
+   * @param rootnode root node to search root dir's node for
+   */
+  void createFoldersRecursively(const std::string& rootdir,
+                                std::map<std::string, TreeNode*>* folders,
+                                TreeNode* rootnode);
 
 private:
   /**
@@ -216,6 +217,12 @@ class LayoutThread : public QThread {
   std::set<Contributer*> m_contribs;
   const char* m_algo;
 public:
+  /**
+   * @brief Creates the thread
+   * @param paintwindow paintwindow to send data to
+   * @param contribs contributers
+   * @param algorithm dot | circo | fdp | neato | nop | nop1 | nop2 | osage | patchwork | sfdp | twopi
+   */
   LayoutThread(PaintWindow* paintwindow, std::set<Contributer*> contribs, const char* algorithm):
     QThread(), m_paintwindow(paintwindow), m_contribs(contribs), m_algo(algorithm){
     Q_ASSERT(paintwindow);
@@ -233,6 +240,10 @@ class StrengthsThread : public QThread {
   std::set<Contributer*> m_contribs;
   const char* m_algo;
 public:
+  /**
+   * @brief Creates the Thread
+   * @param contribs contributers to calculate relations to
+   */
   StrengthsThread(std::set<Contributer*> contribs):
     QThread(), m_contribs(contribs){}
 

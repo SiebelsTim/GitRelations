@@ -29,20 +29,6 @@ public:
   }
 
   /**
-   * @brief rearranges subtree
-   * @param event
-   */
-  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
-
-  /**
-   * @brief Drags leafs with the node
-   * @param change
-   * @param value
-   * @return
-   */
-  virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
-
-  /**
    * @brief adds a leaf to this node
    * @param node node to add
    */
@@ -144,6 +130,21 @@ public:
   std::set<Contributer*> getContributers() const {
     return m_contributers;
   }
+
+  /**
+   * @brief Drags leafs with the node
+   * @param change
+   * @param value
+   * @return
+   */
+  virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+
+protected:
+  /**
+   * @brief rearranges subtree
+   * @param event
+   */
+  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
 
 private:
   /**

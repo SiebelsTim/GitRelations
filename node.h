@@ -43,25 +43,6 @@ public:
    */
   void addNode(Node* node);
   /**
-   * @brief adds a given line between two nodes
-   * @param line line to display
-   * @param isPoint1 need to be false on one node, and true on the other
-   * @param node other node
-   */
-  void addLine(QGraphicsLineItem *line, bool isPoint1, Node* node);
-  /**
-   * @brief moves the line and centered text
-   * @param change
-   * @param value
-   * @return
-   */
-  virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-  /**
-   * @brief Moves the line connecting this node
-   * @param newPos new center position
-   */
-  void moveLines(QPointF newPos);
-  /**
    * @brief gets the line between this node and a given node
    * @param node node to search for
    * @return line item or nullptr
@@ -80,17 +61,6 @@ public:
   virtual void setVisible(bool visible);
 
   /**
-   * @brief Highlights all incident edges and affected files
-   * @param event
-   */
-  virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-  /**
-   * @brief Removes highlight
-   * @param event
-   */
-  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-
-  /**
    * @brief Checks if given node is adjacent to this node
    * @param node node to check for
    * @return true if adjacent
@@ -104,6 +74,39 @@ public:
    * @return string
    */
   std::string getText() const;
+
+protected:
+  /**
+   * @brief adds a given line between two nodes
+   * @param line line to display
+   * @param isPoint1 need to be false on one node, and true on the other
+   * @param node other node
+   */
+  void addLine(QGraphicsLineItem *line, bool isPoint1, Node* node);
+  /**
+   * @brief moves the line and centered text
+   * @param change
+   * @param value
+   * @return
+   */
+  virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+  /**
+   * @brief Moves the line connecting this node
+   * @param newPos new center position
+   */
+  void moveLines(QPointF newPos);
+
+  /**
+   * @brief Highlights all incident edges and affected files
+   * @param event
+   */
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+  /**
+   * @brief Removes highlight
+   * @param event
+   */
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+
 protected:
   /**
    * @brief
