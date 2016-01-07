@@ -7,6 +7,8 @@
 class TreeNode;
 class LeafNode;
 
+#include <QDebug>
+
 /**
  * @brief The Contributer class representing a drawable node
  */
@@ -19,7 +21,14 @@ public:
    * @param scene scene to draw on
    * @param name name of the contributer
    */
-  explicit Contributer(ZoomGraphicsScene* scene, const std::string& name): Node(scene, name), QListWidgetItem(name.c_str()) {}
+  explicit Contributer(ZoomGraphicsScene* scene, const std::string& name): Node(scene, name), QListWidgetItem(name.c_str()) {
+    // Reduce name to fit into rect
+    while (m_text->boundingRect().width() > this->rect().width()) {
+      QString text = m_text->toPlainText() + "...";
+      text.remove(text.indexOf("...") - 1, 10);
+      m_text->setPlainText(text + "...");
+    }
+  }
 
   /**
    * @brief Finds a node by path
