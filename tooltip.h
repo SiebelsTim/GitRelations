@@ -6,6 +6,10 @@
 
 static constexpr size_t maxFiles = 20;
 
+/**
+ * @brief The Tooltip class representing a tooltip inside a graphicsscene for a contributer
+ * @deprecated Not used anymore \n Replaced by ContributerWindow
+ */
 class Tooltip : public QGraphicsRectItem
 {
 public:

@@ -8,27 +8,73 @@
 
 class LeafNode;
 
+/**
+ * @brief The TreeNode class representing an arrangeable (sub)-Tree with leafs
+ *
+ * This is used to represent a folder in a filestructure
+ */
 class TreeNode : public Node
 {
 public:
+  /**
+   * @brief Creates a TreeNode
+   * @param scene scene to draw on
+   * @param content text to display
+   * @param rect bounding rect
+   */
   explicit TreeNode(ZoomGraphicsScene* scene,
                     const std::string& content,
                     const QRectF& rect = QRectF(0, 0, 100, 30))
     : Node(scene, content, rect){
   }
 
+  /**
+   * @brief rearranges subtree
+   * @param event
+   */
   virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
 
+  /**
+   * @brief Drags leafs with the node
+   * @param change
+   * @param value
+   * @return
+   */
   virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
+  /**
+   * @brief adds a leaf to this node
+   * @param node node to add
+   */
   void addChildNode(LeafNode* node);
+  /**
+   * @brief adds a node to this node displaying a hierarchy below it
+   * @param node node to add
+   */
   void addChildNode(TreeNode* node);
+  /**
+   * @brief We represent a tree. Adjacency is for graphs
+   * @param node
+   */
   void addAdjacentNode(Node* node) = delete;
 
+  /**
+   * @brief Returns all nodes in a direct hierarchy below this node
+   * @return  set of nodes
+   */
   std::set<Node*> getChildren() const;
+  /**
+   * @brief Returns all leafs on this node
+   * @return set of leafs
+   */
   std::set<LeafNode*> getLeafs() const;
 
   // This is here, because it fails to link, because <true> isn't generated
+  /**
+   * @brief arranges this subtree
+   *
+   * templates root to improve performance so we can avoid the branch
+   */
   template <bool isRoot = false>
   void arrange() {
     constexpr float TAU = 2 * 3.1415926;
@@ -75,20 +121,42 @@ public:
 
   }
 
-
+  /**
+   * @brief sets the parent of this node
+   * @param parent parent node
+   */
   void setParent(TreeNode* parent);
 
+  /**
+   * @brief adds a Contributer to this node
+   *
+   * This means the contributer affected this file
+   * @param contributer Contributer to add
+   */
   void addContributer(Contributer* contributer) {
     m_contributers.insert(contributer);
   }
 
+  /**
+   * @brief Returns all contributers affecting this file
+   * @return  set of contributers
+   */
   std::set<Contributer*> getContributers() const {
     return m_contributers;
   }
 
 private:
+  /**
+   * @brief Parent node
+   */
   TreeNode* m_parent;
+  /**
+   * @brief contributers affecting this folder
+   */
   std::set<Contributer*> m_contributers;
+  /**
+   * @brief file in this folder
+   */
   std::set<LeafNode*> m_leafs;
 
 };
