@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=GitRelations
+Comment=Displays Git Relations
+Exec=/home/tim/Projects/GitRelations/git_relations
+Icon=/home/tim/Projects/GitRelations/icon.png
+Terminal=false
+Type=Application
+Categories=Utility;Application;
+X-Desktop-File-Install-Version=0.22
