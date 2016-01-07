@@ -8,6 +8,7 @@ moc_*
 ui_*.h
 
 docs/
+Doxyfile # using Doxyfile.in
 
 libGitRelationsLib.so
 libGitRelationsLib.a
