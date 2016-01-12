@@ -22,6 +22,7 @@ ContributerWindow::ContributerWindow(Contributer* contrib, const Repository* rep
 }
 
 void ContributerWindow::load() {
+  ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
   ui->username->setText(m_contrib->getName().c_str());
   std::map<std::string, size_t> files = m_contrib->getFiles();
   this->setWindowTitle(m_contrib->getName().c_str());
