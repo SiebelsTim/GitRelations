@@ -1,0 +1,18 @@
+To compile you need to install libgit2, qt and libgraphviz
+
+    sudo apt-get install libgit2-dev qt5-default libgraphviz-dev
+
+Then you can configure the project
+
+    cmake .
+
+If you get an error that it could not find libgitcpp, you can hint cmake to it
+
+    cmake -DPC_LIBGITCPP_INCLUDEDIR=/path/to/libgitcpp/include .
+
+And then start compiling
+
+    make
+
+
+Note: This repository contains a 64bit version of libgitcpp. If you are compiling on a 32bit system, you need to compile libgitcpp yourself
