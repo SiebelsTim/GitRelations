@@ -6,6 +6,8 @@ find_path(
   /var/lib
   /opt
   /opt/local
+  HINTS
+  ${PC_LIBGITCPP_INCLUDEDIR}
 )
 
 message("Libgitcpp include dir: " ${LIBGITCPP_INCLUDE_DIR})
