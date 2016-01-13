@@ -22,7 +22,7 @@
       </property>
       <widget class="QGraphicsView" name="graphicsView"/>
       <widget class="QGraphicsView" name="graphicsView_2"/>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QCheckBox" name="userListCheckbox">
@@ -31,6 +31,13 @@
           </property>
           <property name="checked">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="contributerCount">
+          <property name="text">
+           <string>%d Contributers</string>
           </property>
          </widget>
         </item>

@@ -57,6 +57,8 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo, std::pair<uint
     drawFiles(user, affectedfiles);
   }
 
+  ui->contributerCount->setText(QString::number(m_users.size()) + " Contributers");
+
   connectUsers();
 
   g_root->arrange<true>();
