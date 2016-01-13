@@ -22,7 +22,7 @@
 #include <QTimeLine>
 #include <QDebug>
 
-PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
+PaintWindow::PaintWindow(QWidget *parent, const Repository* repo, std::pair<uint, uint> since_until) :
   QMainWindow(parent),
   ui(new Ui::PaintWindow),
   m_repo(repo)
@@ -50,7 +50,7 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo) :
 
   g_root = new TreeNode(m_scene, "/");
 
-  std::vector<CommitX*> commits = m_repo->getAllCommitsX();
+  std::vector<CommitX*> commits = m_repo->getAllCommitsX(since_until.first, since_until.second);
   for (const auto& commit : commits) {
     std::vector<FileStat> affectedfiles = commit->getFiles();
     Contributer* user = addUser(commit->getAuthor(), affectedfiles);

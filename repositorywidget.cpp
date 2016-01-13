@@ -43,6 +43,25 @@ void RepositoryWidget::loadFacts() {
 
 void RepositoryWidget::on_pushButton_clicked()
 {
-  auto paint = new PaintWindow(this, m_repo);
+  uint since = 0;
+  uint until = 0;
+  if (ui->SinceChkBox->isChecked()) {
+    since = ui->SinceDate->dateTime().toTime_t();
+  }
+  if (ui->UntilChkBox->isChecked()) {
+    until = ui->UntilDate->dateTime().toTime_t();
+  }
+
+  auto paint = new PaintWindow(this, m_repo, std::make_pair(since, until));
   paint->showMaximized();
+}
+
+void RepositoryWidget::on_SinceChkBox_toggled(bool checked)
+{
+    ui->SinceDate->setEnabled(checked);
+}
+
+void RepositoryWidget::on_UntilChkBox_toggled(bool checked)
+{
+    ui->UntilDate->setEnabled(checked);
 }

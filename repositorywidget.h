@@ -50,6 +50,17 @@ private slots:
    */
   void on_pushButton_clicked();
 
+  /**
+   * @brief Enables/Disables SinceDate
+   * @param checked
+   */
+  void on_SinceChkBox_toggled(bool checked);
+  /**
+   * @brief Enables/Disables UntilDate
+   * @param checked
+   */
+  void on_UntilChkBox_toggled(bool checked);
+
 private:
   const Repository* m_repo;
   Ui::RepositoryWidget *ui;

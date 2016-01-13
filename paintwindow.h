@@ -37,7 +37,7 @@ public:
    * @param parent i.e. RepositoryWidget
    * @param repo Repository to display data for. Never null
    */
-  explicit PaintWindow(QWidget *parent, const Repository* repo);
+  explicit PaintWindow(QWidget *parent, const Repository* repo, std::pair<uint, uint> since_until);
   ~PaintWindow();
 
   /**
