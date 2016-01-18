@@ -23,7 +23,7 @@
       <widget class="QGraphicsView" name="graphicsView"/>
       <widget class="QGraphicsView" name="graphicsView_2"/>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="contributerLayout">
         <item>
          <widget class="QCheckBox" name="userListCheckbox">
           <property name="text">
