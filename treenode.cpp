@@ -40,7 +40,7 @@ QVariant TreeNode::itemChange(GraphicsItemChange change, const QVariant& value)
     const auto height = this->rect().height();
 
     int leafcount = 0;
-    int distance = width/2;
+    int distance = width/2 + LEAF_SIZE / 2;
 
     auto leafs_per_circle = 8;
     auto leafdegree = TAU / leafs_per_circle;
