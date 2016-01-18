@@ -14,9 +14,15 @@ void LeafNode::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget
 
 
 void LeafNode::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-  m_text->setVisible(true);
+  if (isVisible()) {
+    m_text->setVisible(true);
+  }
 }
 
 void LeafNode::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
   m_text->setVisible(false);
+}
+
+bool LeafNode::isVisible() const {
+  return TreeNode::isVisible() && getScene()->getZoomFactor() >= 0.835382868;
 }

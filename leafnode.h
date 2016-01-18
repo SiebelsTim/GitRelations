@@ -30,6 +30,8 @@ public:
     m_text->setVisible(false);
   }
 
+  bool isVisible() const;
+
 protected:
 
   /**

@@ -30,7 +30,7 @@ public:
   }
 
 private:
-  double m_zoom;
+  double m_zoom = 1.0;
 
 };
 
