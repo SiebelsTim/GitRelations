@@ -109,6 +109,7 @@ void PaintWindow::clickContributers(bool checked) {
   ui->graphicsView_2->setVisible(checked);
   ui->userList->setVisible(checked);
   ui->userListCheckbox->setVisible(checked);
+  ui->contributerCount->setVisible(checked);
 }
 
 void PaintWindow::clickFiles(bool checked) {
