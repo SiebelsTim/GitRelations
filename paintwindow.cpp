@@ -41,11 +41,13 @@ PaintWindow::PaintWindow(QWidget *parent, const Repository* repo, std::pair<uint
   m_scene = new ZoomGraphicsScene(this);
   ui->graphicsView->setScene(m_scene);
   ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+  ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
   new GraphicsViewZoom(ui->graphicsView);
 
   m_scene2 = new ZoomGraphicsScene(this);
   ui->graphicsView_2->setScene(m_scene2);
   ui->graphicsView_2->setRenderHint(QPainter::Antialiasing);
+  ui->graphicsView_2->setDragMode(QGraphicsView::ScrollHandDrag);
   new GraphicsViewZoom(ui->graphicsView_2);
 
   g_root = new TreeNode(m_scene, "/");
