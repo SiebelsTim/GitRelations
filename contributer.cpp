@@ -79,6 +79,7 @@ void Contributer::mousePressEvent(QGraphicsSceneMouseEvent* event) {
   for (auto& leaf : m_leafs) {
     QPen pen = leaf->pen();
     pen.setColor(red);
+    pen.setWidth(3);
     leaf->setPen(pen);
   }
 
@@ -90,6 +91,7 @@ void Contributer::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
   for (auto& leaf : m_leafs) {
     QPen pen = leaf->pen();
     pen.setColor(black);
+    pen.setWidth(1);
     leaf->setPen(pen);
   }
 
