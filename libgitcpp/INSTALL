@@ -1,0 +1,16 @@
+To compile this library, you need to have libgit2 installed and have checked out the submodules
+
+To do this, run:
+
+    git submodule init
+    git submodule update
+
+    sudo apt-get install libgit2-dev
+
+Then compile:
+
+    mkdir build && cd build
+    cmake ..
+    make
+
+You'll find a static library in the build folder.
